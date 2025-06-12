@@ -1,0 +1,35 @@
+{
+  "name": "code-smith-info-soft-node",
+  "version": "1.0.0",
+  "description": "A dynamic and scalable IT company website built with Node.js, Express.js, and MongoDB. Includes backend API support for services, contact forms, authentication, and more.",
+  "homepage": "https://github.com/mihirkasodariya/code-smith-info-soft-node.js#readme",
+  "bugs": {
+    "url": "https://github.com/mihirkasodariya/code-smith-info-soft-node.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mihirkasodariya/code-smith-info-soft-node.js.git"
+  },
+  "license": "ISC",
+  "author": "mihirkasodariya",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
+    "multer": "^2.0.1",
+    "nodemon": "^3.1.10",
+    "path": "^0.12.7",
+    "url": "^0.11.4"
+  }
+}
