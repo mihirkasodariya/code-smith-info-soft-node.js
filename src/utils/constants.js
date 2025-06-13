@@ -17,12 +17,44 @@ export const resMessage = {
     ADD_BLOG: "Blog has been published successfully!",
     BLOG_LIST: "Blog list fetched successfully!",
     DELETE_BLOG: "Blog deleted successfully! It has been removed from your list.",
+    UPDATE_BLOG: "Blog has been updated successfully!",
     ADD_TECH_STACK: "Tech stack has been added successfully!",
     TECH_STACK_LIST: "Tech stack list fetched successfully!",
     DELETE_TECH_STACK: "Tech stack deleted successfully! It has been removed from your list.",
     UPDATE_TECH_STACK: "Tech stack updated successfully.",
     TECH_STACK_NAME_EXISTS: "This tech stack name is already in use. Try using a unique name.",
-    TECH_STACK_EXISTS_BLOG: "Cannot delete. Tech stack is linked to blogs. Please modify or remove the blogs first."
+    TECH_STACK_EXISTS_BLOG: "Cannot delete. Tech stack is linked to blogs. Please modify or remove the blogs first.",
+    ADD_CASE_STUDY: "Case study has been published successfully!",
+    CASE_STUDY_LIST: "Case study list fetched successfully!",
+    UPDATE_CASE_STUDY: "Case study has been updated successfully!",
+    DELETE_CASE_STUDY: "Case study deleted successfully! It has been removed from your list.",
+    ADD_CAREER: "Career has been published successfully!",
+    CAREER_LIST: "careers list fetched successfully!",
+    UPDATE_CAREER: "Career updated successfully.",
+    ARCHIVE_CAREER: "Career archived successfully. It is no longer visible to the public.",
+    ADD_PORTFOLIO: "Portfolio has been published successfully!",
+    PORTFOLIO_LIST: "Portfolio list fetched successfully!",
+    UPDATE_PORTFOLIO: "Portfolio has been updated successfully!",
+    DELETE_PORTFOLIO: "Portfolio deleted successfully! It has been removed from your list.",
+    ADD_TESTIMONIALS: "testimonials has been published successfully!",
+    TESTIMONIALS_LIST: "testimonials list fetched successfully!",
+    UPDATE_TESTIMONIALS: "testimonials has been updated successfully!",
+    DELETE_TESTIMONIALS: "testimonials deleted successfully! It has been removed from your list.",
+    ADD_MEDIA_FILE: "mediaFile has been published successfully!",
+    MEDIA_FILE_LIST: "mediaFile list fetched successfully!",
+    DELETE_MEDIA_FILE: "mediaFile deleted successfully! It has been removed from your list.",
+    ADD_JOB: "Thanks for applying! We'll review your application and connect with you shortly.!",
+    JOB_LIST: "Job Application list fetched successfully!",
+    ADD_INQUIRY: "Thank you for your inquiry! Our team will review it and respond shortly.",
+    INQUIRY_LIST: "Inquiry list fetched successfully!",
+    INQUIRY_SINGLE: "Inquiry fetched successfully!",
+    MARK_INQUIRY: "The inquiry has been successfully marked as reviewed.",
+    MARK_JOB: "The Job Application has been successfully marked as reviewed.",
+    ADD_GALLERY: "Gallery has been published successfully!",
+    GALLERY_LIST: "Gallery list fetched successfully!",
+    DELETE_GALLERY: "Gallery deleted successfully! It has been removed from your list.",
+
+
 };
 
 export const resStatusCode = {
@@ -43,6 +75,14 @@ export const dbTableName = {
     SUCCESS_STORY: "success_stories",
     BLOG: 'blogs',
     TECH_STACK_MASTER: "tech_stack_masters",
-}
+    CASE_STUDY: "case_studys",
+    CAREER: "careers",
+    PORTFOLIO: "portfolios",
+    TESTIMONIALS: "testimonials",
+    ABOUT_US: "about_us",
+    INQUIRY: "business_inquirys",
+    JOB_APPLICATION: "job_applications",
+    GALLERY : 'gallerys'
+};
 
 

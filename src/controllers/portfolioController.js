@@ -1,38 +1,44 @@
-import { blogModel, blogValidation, idValidation } from "../models/blogModel.js";
+import { portfolioModel, portfolioValidation, idValidation } from "../models/PortfolioModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addBlog(req, res) {
-    const image = req?.file?.filename;
-    const { techStackId, title, description, details } = req.body;
-    const { error } = blogValidation.validate({ techStackId, image, title, description, details });
+export async function addPortfolio(req, res) {
+    const banner = req.files?.banner[0]?.filename || '';
+    const image = req.files?.image?.[0]?.filename || '';
+    req.body.banner = banner;
+    req.body.image = image;
+    const { techStackId, projectName, description, features } = req.body;
+
+    const { error } = portfolioValidation.validate(req.body);
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     try {
-        const addBlog = await blogModel.create({
+        const newPortfolio = await portfolioModel.create({
             techStackId,
-            image,
-            title,
-            details,
-            description
+            projectName,
+            description,
+            features,
+            banner,
+            image
         });
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_PORTFOLIO, newPortfolio);
     } catch (error) {
         console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
-export async function getAllBlog(req, res) {
+export async function getAllPortfolio(req, res) {
     try {
-        const blogsData = await blogModel.find({ isActive: true }).populate('techStackId');
-        const { blogs, techStackMap } = blogsData.reduce(
-            (acc, blog) => {
-                const { techStackId, image, ...rest } = blog._doc;
-                acc.blogs.push({
+        const portfolioData = await portfolioModel.find({ isActive: true }).populate('techStackId');
+        const { portfolio, techStackMap } = portfolioData.reduce(
+            (acc, data) => {
+                const { techStackId, image, banner, ...rest } = data._doc;
+                acc.portfolio.push({
                     ...rest,
-                    image: `/blog/${image}`,
+                    image: `/portfolio/${image}`,
+                    banner: `/portfolio/${banner}`,
                     techStackId: techStackId?._id,
                     techStackName: techStackId?.name,
                     bgColor: techStackId?.bgColor,
@@ -49,52 +55,53 @@ export async function getAllBlog(req, res) {
                 return acc;
             },
             {
-                blogs: [],
+                portfolio: [],
                 techStackMap: new Map(),
             },
         );
         const techStacks = Array.from(techStackMap.values());
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_LIST, { blogs, techStacks });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, { portfolio, techStacks });
     } catch (error) {
         console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
-export async function updateBlog(req, res) {
+export async function updatePortfolio(req, res) {
     const { id } = req.params;
-    const { error } = blogValidation.validate({ id });
+    const updateData = req.body;
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
-    const updateData = req.body;
+    req.files?.banner?.[0]?.filename && (updateData.banner = req.files.banner[0].filename);
     req.files?.image?.length && (updateData.image = req.files.image.map((f) => f.filename));
     try {
-        await blogModel.findByIdAndUpdate(
+        await portfolioModel.findByIdAndUpdate(
             { _id: id },
             { $set: updateData },
             { new: false }
         );
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_BLOG, {});
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_PORTFOLIO, {});
     } catch (error) {
         console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
-export async function deleteBlog(req, res) {
-    const { id } = req?.params;
+export async function deletePortfolio(req, res) {
+    const { id } = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     try {
-        await blogModel.findByIdAndUpdate(
+       await portfolioModel.findByIdAndUpdate(
             { _id: id },
-            { isActive: false },
+            { $set: { isActive: false } },
             { new: false }
         );
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_BLOG, {});
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_PORTFOLIO, {});
     } catch (error) {
         console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});

@@ -68,3 +68,117 @@ export const blogImage = multer({
     storage: blogStorage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
 }).single('image');
+
+const caseStudyStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/caseStudy';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const first4Chars = file.originalname.slice(0, 4);
+        cb(null, Date.now() + 'case-study' + first4Chars + ext);
+    },
+});
+
+export const caseStudy = multer({
+    storage: caseStudyStorage,
+    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+}).fields([
+    { name: 'companyLogo', maxCount: 1 },
+    { name: 'mainImage', maxCount: 1 },
+    { name: 'images', maxCount: 10 },
+]);
+
+
+const portfolioStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/portfolio';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const first4Chars = file.originalname.slice(0, 4);
+        cb(null, Date.now() + 'portfolio' + first4Chars + ext);
+    },
+});
+
+export const portfolio = multer({
+    storage: portfolioStorage,
+    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+}).fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'banner', maxCount: 1 },
+]);
+
+
+const testimonialsStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/testimonials';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const first4Chars = file.originalname.slice(0, 4);
+        cb(null, Date.now() + 'testimonials' + first4Chars + ext);
+    },
+});
+export const testimonials = multer({
+    storage: testimonialsStorage,
+    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+}).single('image');
+
+const aboutUSStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/aboutUS';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const first4Chars = file.originalname.slice(0, 4);
+        cb(null, Date.now() + 'about-us' + first4Chars + ext);
+    },
+});
+export const aboutUS = multer({
+    storage: aboutUSStorage,
+}).fields([
+    { name: 'mediaFile', maxCount: 4 },
+]);
+
+const jobApplicationPDFStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/jobApplication';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const name = file.originalname.split('.')[0].slice(0, 4); // first 4 chars of filename
+        cb(null, Date.now() + '-attach-' + name + ext);
+    },
+});
+
+export const jobApplicationPDF = multer({
+  storage: jobApplicationPDFStorage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['application/pdf'];
+    if (allowedTypes.includes(file.mimetype)) cb(null, true);
+    else cb(new Error('Only PDF files are allowed.'));
+  },
+}).single('attach');
+
+const galleryStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/gallery';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const name = file.originalname.split('.')[0].slice(0, 4);
+        cb(null, Date.now() + '-gallery-' + name + ext);
+    },
+});
+export const gallery = multer({
+    storage: galleryStorage,
+    limits: { fileSize: 1 * 1024 * 1024 },
+}).array('images', 10);

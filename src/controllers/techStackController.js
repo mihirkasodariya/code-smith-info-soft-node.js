@@ -4,8 +4,8 @@ import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
 export async function addTechStack(req, res) {
-    const { name } = req.body;
-    const { error } = techStackValidation.validate({ name });
+    const { name, bgColor, textColor } = req.body;
+    const { error } = techStackValidation.validate(req.body);
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
@@ -15,7 +15,9 @@ export async function addTechStack(req, res) {
             return response.error(res, resStatusCode.CLIENT_ERROR, resMessage.TECH_STACK_NAME_EXISTS, {});
         };
         const addTechStack = await techStackModel.create({
-            name
+            name,
+            bgColor,
+            textColor
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TECH_STACK, addTechStack);
     } catch (error) {

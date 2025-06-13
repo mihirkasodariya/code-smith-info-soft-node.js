@@ -6,6 +6,8 @@ import { dbTableName } from "../utils/constants.js"
 const techStackSchema = new Schema(
     {
         name: { type: String, required: true },
+        bgColor: { type: String, required: true },
+        textColor: { type: String, required: true },
         isActive: { type: Boolean, default: true }
     },
     { timestamps: true }
@@ -18,8 +20,17 @@ export const techStackValidation = Joi.object({
         "string.empty": "techStack Name is required.",
         "any.required": "techStack Name is required.",
     }),
+    bgColor: Joi.string().required().messages({
+        "string.base": "Background color must be a string.",
+        "string.empty": "Background color is required.",
+        "any.required": "Background color is required.",
+    }),
+    textColor: Joi.string().required().messages({
+        "string.base": "Text color must be a string.",
+        "string.empty": "Text color is required.",
+        "any.required": "Text color is required.",
+    }),
 });
-
 
 export const idValidation = Joi.object({
     id: Joi.string().length(24).hex().required().messages({
@@ -43,5 +54,15 @@ export const updateTechStackValidation = Joi.object({
         "string.base": "techStack Name must be a string.",
         "string.empty": "techStack Name is required.",
         "any.required": "techStack Name is required.",
+    }),
+    bgColor: Joi.string().required().messages({
+        "string.base": "Background color must be a string.",
+        "string.empty": "Background color is required.",
+        "any.required": "Background color is required.",
+    }),
+    textColor: Joi.string().required().messages({
+        "string.base": "Text color must be a string.",
+        "string.empty": "Text color is required.",
+        "any.required": "Text color is required.",
     }),
 });

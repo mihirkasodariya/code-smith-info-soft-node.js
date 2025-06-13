@@ -51,3 +51,27 @@ export const authorizeRole = (...allowedRoles) => {
         next();
     };
 };
+
+
+export const validateAboutUSFiles = (req, res, next) => {
+    const files = req.files?.mediaFile || [];
+
+    const invalidFile = files.find((file) => {
+        const isImage = file.mimetype.startsWith('image/');
+        const isVideo = file.mimetype.startsWith('video/');
+        if (isImage && file.size > 1 * 1024 * 1024) return true;
+        if (isVideo && file.size > 100 * 1024 * 1024) return true;
+        return false;
+    });
+
+    if (invalidFile) {
+        const sizeLimit = invalidFile.mimetype.startsWith('image/') ? '1MB' : '100MB';
+        return res.status(400).json({
+            success: false,
+            message: `${invalidFile.originalname} exceeds ${sizeLimit} limit.`,
+            data: {}
+        });
+    }
+
+    next();
+};
