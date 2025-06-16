@@ -10,7 +10,7 @@
 <body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'Segoe UI', sans-serif;">
 	<table width="100%" cellpadding="0" cellspacing="0" style="padding: 40px 0; background-color: #f4f6f9;">
 		<tr>
-			<td style="text-align: center;">
+			<td align="center">
 				<table width="700" cellpadding="0" cellspacing="0"
 					style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;">
 
@@ -24,49 +24,36 @@
 
 					<!-- Body -->
 					<tr>
-						<h2 style="margin-top: 0; font-size: 24px;">Thank You for Contacting Us!</h2>
 						<td style="padding: 50px 40px; color: #333;">
 							<h2 style="margin-top: 0; font-size: 24px;">Thank You for Reaching Out!</h2>
-							<p style="font-size: 18px; margin-bottom: 25px;">Hi <strong>
-									<%= data.fullName %>
-								</strong>,</p>
+							<p style="font-size: 18px; margin-bottom: 25px;">Hi <strong><%= data.fullName %></strong>,</p>
 
 							<p style="font-size: 16px; line-height: 1.7; margin-bottom: 20px;">
-								We have received your inquiry and appreciate your interest in <strong>CodeSmith
-									InfoSoft</strong>. Our team will carefully review the information provided and get
-								in touch with you shortly.</p>
+								We’ve received your inquiry and truly appreciate your interest in <strong>CodeSmith InfoSoft</strong>. One of our representatives will review your message and connect with you shortly.
+							</p>
 
 							<hr style="border: none; height: 1px; background-color: #e1e1e1; margin: 30px 0;" />
 
-							<h3 style="font-size: 18px; color: #273974; margin-bottom: 15px;">Here is a detailed summary
-								of the information you submitted:</h3>
+							<h3 style="font-size: 18px; color: #273974; margin-bottom: 15px;">Here is a detailed summary of the information you submitted:</h3>
 
 							<!-- Inquiry Table -->
 							<table width="100%" cellpadding="12" cellspacing="0"
 								style="border: 1px solid #ddd; border-radius: 10px; border-collapse: collapse; font-size: 15px;">
 								<tr style="background-color: #f9f9f9;">
 									<td style="font-weight: bold; border-bottom: 1px solid #ddd;">Name:</td>
-									<td style="border-bottom: 1px solid #ddd;">
-										<%= data.fullName %>
-									</td>
+									<td style="border-bottom: 1px solid #ddd;"><%= data.fullName %></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold; border-bottom: 1px solid #ddd;">Email:</td>
-									<td style="border-bottom: 1px solid #ddd;">
-										<%= data.email %>
-									</td>
+									<td style="border-bottom: 1px solid #ddd;"><%= data.email %></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold; border-bottom: 1px solid #ddd;">Phone:</td>
-									<td style="border-bottom: 1px solid #ddd;">
-										<%= data.mobile %>
-									</td>
+									<td style="border-bottom: 1px solid #ddd;"><%= data.mobile %></td>
 								</tr>
 								<tr>
 									<td style="font-weight: bold; vertical-align: top;">Message:</td>
-									<td>
-										<%= data.message %>
-									</td>
+									<td><%= data.message %></td>
 								</tr>
 							</table>
 
@@ -78,8 +65,8 @@
 
 								<a href="https://codesmithinfosoft.com" target="_blank"
 									style="display: inline-block; background-color: #119448; color: #fff; padding: 14px 28px; font-size: 16px; border-radius: 40px; text-decoration: none;">
-									<img src="<%= data.base_URL %>/assets/web.png" alt="Website Icon" width="18"
-										height="18" style="vertical-align: middle; margin-right: 8px;" />
+									<img src="<%= data.base_URL %>/assets/web.png" alt="Website Icon"
+										width="18" height="18" style="vertical-align: middle; margin-right: 8px;" />
 									<strong style="font-weight: 600;">Visit Our Website</strong>
 								</a>
 							</div>
@@ -99,18 +86,17 @@
 									reserved.</p>
 								<a href="https://www.instagram.com/codesmithinfosoft" target="_blank"
 									style="margin: 0 8px; display: inline-block;">
-									<img src="<%=data.base_URL%>/assets/insta.png" alt="Instagram" width="24"
+									<img src="<%= data.base_URL %>/assets/insta.png" alt="Instagram" width="24"
 										style="display: block;" />
 								</a>
 								<a href="https://www.linkedin.com/company/codesmithinfosoftllp" target="_blank"
 									style="margin: 0 8px; display: inline-block;">
-									<img src="<%=data.base_URL%>/assets/linkedin.png" alt="LinkedIn" width="24"
+									<img src="<%= data.base_URL %>/assets/linkedin.png" alt="LinkedIn" width="24"
 										style="display: block;" />
 								</a>
-								<a href="https://twitter.com/CodeSmithSHG" target="_blank"
+								<a href="https://x.com/CodeSmithSHG" target="_blank"
 									style="margin: 0 8px; display: inline-block;">
-									<img src="<%=data.base_URL%>/twitter.png" alt="X" width="24"
-										style="display: block;" />
+									<img src="<%= data.base_URL %>/x.png" alt="X" width="24" style="display: block;" />
 								</a>
 							</div>
 						</td>
