@@ -152,19 +152,19 @@ const jobApplicationPDFStorage = diskStorage({
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
-        const name = file.originalname.split('.')[0].slice(0, 4); // first 4 chars of filename
-        cb(null, Date.now() + '-attach-' + name + ext);
+        const name = file.originalname.split('.')[0].slice(0, 4);
+        cb(null, Date.now() + '-attach' + name + ext);
     },
 });
 
 export const jobApplicationPDF = multer({
-  storage: jobApplicationPDFStorage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ['application/pdf'];
-    if (allowedTypes.includes(file.mimetype)) cb(null, true);
-    else cb(new Error('Only PDF files are allowed.'));
-  },
+    storage: jobApplicationPDFStorage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['application/pdf'];
+        if (allowedTypes.includes(file.mimetype)) cb(null, true);
+        else cb(new Error('Only PDF files are allowed.'));
+    },
 }).single('attach');
 
 const galleryStorage = diskStorage({
@@ -175,10 +175,27 @@ const galleryStorage = diskStorage({
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
         const name = file.originalname.split('.')[0].slice(0, 4);
-        cb(null, Date.now() + '-gallery-' + name + ext);
+        cb(null, Date.now() + '-gallery' + name + ext);
     },
 });
 export const gallery = multer({
     storage: galleryStorage,
     limits: { fileSize: 1 * 1024 * 1024 },
 }).array('images', 10);
+
+
+const teamMemberStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/teamMember';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const name = file.originalname.split('.')[0].slice(0, 4);
+        cb(null, Date.now() + '-team-member' + name + ext);
+    },
+});
+export const teamMember = multer({
+    storage: teamMemberStorage,
+    limits: { fileSize: 1 * 1024 * 1024 }
+}).single('photo');

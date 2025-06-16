@@ -12,6 +12,7 @@ import testimonials from "./testimonialsRoutes.js";
 import contact from "./contactRoutes.js";
 import about from "./aboutRoutes.js";
 import gallery from "./galleryRoutes.js";
+import team from "./teamRoutes.js";
 
 
 const router = Router();
@@ -28,5 +29,6 @@ router.use("/testimonials", testimonials);
 router.use("/contact", contact);
 router.use("/about", about);
 router.use("/gallery", gallery);
+router.use("/team", team);
 
 export default router;

@@ -53,7 +53,11 @@ export const resMessage = {
     ADD_GALLERY: "Gallery has been published successfully!",
     GALLERY_LIST: "Gallery list fetched successfully!",
     DELETE_GALLERY: "Gallery deleted successfully! It has been removed from your list.",
-
+    ADD_TEAM : "Team Member has been published successfully!",
+    UPDATE_TEAM: "Team Member stack updated successfully.",
+    TEAM_LIST: "Team Member fetched successfully!",
+    TEAM_SINGLE: "Team Member fetched successfully!",
+    DELETE_TEAM: "Team Member deleted successfully! It has been removed from your list.",
 
 };
 
@@ -82,7 +86,8 @@ export const dbTableName = {
     ABOUT_US: "about_us",
     INQUIRY: "business_inquirys",
     JOB_APPLICATION: "job_applications",
-    GALLERY : 'gallerys'
+    GALLERY : 'gallerys',
+    TEAM: 'teams'
 };
 
 
