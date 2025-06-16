@@ -79,7 +79,7 @@ const jobSchema = new mongoose.Schema({
     currentSalary: { type: String, required: true },
     expectedSalary: { type: String, required: true },
     currentJobLocation: { type: String, required: true },
-    position: { type: String, required: true },
+    applyPosition: { type: String, required: true },
     isMark: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
 },
@@ -131,9 +131,9 @@ export const jobValidation = Joi.object({
         "string.empty": "Current job location is required",
         "any.required": "Current job location is required"
     }),
-    position: Joi.string().required().messages({
-        "string.empty": "Position is required",
-        "any.required": "Position is required"
+    applyPosition: Joi.string().required().messages({
+        "string.empty": "Apply Position is required",
+        "any.required": "Apply Position is required"
     }),
     attach: Joi.string().required().messages({
         'string.base': 'Attachment must be a string.',

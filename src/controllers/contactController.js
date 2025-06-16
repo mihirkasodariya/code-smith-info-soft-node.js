@@ -1,6 +1,7 @@
 import { inquiryModel, inquiryValidation, idValidation, jobModel, jobValidation } from '../models/contactModel.js';
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
+import sendMail from '../../config/mailer/index.js';
 
 export const addBusinessInquiry = async (req, res) => {
     try {
@@ -19,6 +20,14 @@ export const addBusinessInquiry = async (req, res) => {
             mobile,
             message
         });
+        sendMail("business_inquiry", "Welcome to Molimor Store", email, {
+            fullName: fname + lname,
+            email: email,
+            mobile: mobile,
+            message: message,
+            base_URL: process.env.BASE_URL
+        });
+
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);
     } catch (error) {
         console.error(error);
@@ -65,7 +74,7 @@ export const markInquiry = async (req, res) => {
 
 export const addJobApplication = async (req, res) => {
     try {
-        const { name, email, mobile, countryCode, type, experienceYM, currentSalary, expectedSalary, currentJobLocation, position } = req.body;
+        const { name, email, countryCode, mobile, type, experienceYM, currentSalary, expectedSalary, currentJobLocation, applyPosition } = req.body;
         const attach = req.file?.filename;
         req.body.attach = attach;
         const { error } = jobValidation.validate(req.body);
@@ -82,7 +91,7 @@ export const addJobApplication = async (req, res) => {
             currentSalary,
             expectedSalary,
             currentJobLocation,
-            position,
+            applyPosition,
             attach
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_JOB, jobData);

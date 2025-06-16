@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Business Inquiry Received - Code Smith Info Soft</title>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'IBM Plex Mono', 'Georgia', serif;">
+	<table width="100%" cellpadding="0" cellspacing="0" style="padding: 40px 0; background-color: #f4f6f9;">
+		<tr>
+			<td align="center">
+				<table width="700" cellpadding="0" cellspacing="0"
+					style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 0 12px rgba(0,0,0,0.08); font-family: 'IBM Plex Mono', 'Georgia', serif;padding: 50px;">
+
+					<!-- Header with Logo -->
+					<tr style="background: rgba(233, 55, 58, 0.05);">
+						<td
+							style=" width: 1360px; height: 113px; padding: 20px 60px; text-align: center; border-radius: 100px; box-sizing: border-box; margin: 50px;">
+							<img src="../../../public/assets/Group.svg" alt="Code Smith Info Soft Logo"
+								style="max-width: 180px; height: auto;" />
+						</td>
+					</tr>
+					<!-- Body -->
+					<tr>
+						<td style="padding: 40px; color: #333333;">
+							<p style="font-size: 20px; margin-top: 0;">Hello <strong>
+									<%= data.fullName %>
+								</strong>,</p>
+
+							<p style="font-size: 17px; line-height: 1.6;">
+								Thank you for contacting <strong>Code Smith Info Soft</strong>. We've received your
+								business inquiry and our team will reach out to you shortly.
+							</p>
+
+							<p style="font-size: 17px; line-height: 1.6;">
+								Below is a summary of the information you provided:
+							</p>
+
+							<!-- Inquiry Details Table -->
+							<table width="100%" cellpadding="10" cellspacing="0" style="
+    margin-top: 20px; 
+    border-collapse: separate; 
+    border-spacing: 0;
+    border: 1px solid #333333;
+    border-radius: 16px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+  ">
+								<tr>
+									<td width="30%"><strong>Name:</strong></td>
+									<td>
+										<%= data.fullName %>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>Email:</strong></td>
+									<td>
+										<%= data.email %>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>Phone:</strong></td>
+									<td>
+										<%= data.mobile %>
+									</td>
+								</tr>
+								<tr>
+									<td style="vertical-align: top;"><strong>Message:</strong></td>
+									<td>
+										<%= data.message %>
+									</td>
+								</tr>
+							</table>
+
+							<!-- CTA -->
+							<div style="margin-top: 40px; text-align: center; margin-bottom: 30px;">
+								<a href="https://codesmithinfosoft.com" target="_blank"
+									style="background-color: #2e7dff; color: #fff; padding: 6px 10px; font-size: 15px; border-radius: 7px; text-decoration: none;">
+									Visit Our Website
+								</a>
+							</div>
+
+							<!-- <p style="margin-top: 30px; font-size: 16px; color: #555;">
+                For urgent matters, feel free to reply to this email directly.
+              </p> -->
+
+							<p style="font-size: 16px;">Warm regards,<br><strong>Team Code Smith Info Soft</strong></p>
+						</td>
+					</tr>
+
+					<!-- Footer -->
+					<tr style="background-color: #273974; ">
+						<td
+							style="padding: 30px; text-align: center; color: #ffffff; box-sizing: border-box; border-radius: 10px; box-sizing: border-box;">
+							<p style="margin: 0; font-size: 15px;">
+								&copy; 2021 Code Smith Info Soft. All rights reserved.
+							</p>
+
+							<!-- Social Links -->
+							<div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
+								<a href="https://www.instagram.com/yourcompany" target="_blank">
+									<img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"
+										width="24" height="24" style="vertical-align: middle;" />
+								</a>
+								<a href="https://www.facebook.com/yourcompany" target="_blank">
+									<img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Facebook"
+										width="24" height="24" style="vertical-align: middle;" />
+								</a>
+								<a href="https://www.linkedin.com/company/yourcompany" target="_blank">
+									<img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn"
+										width="24" height="24" style="vertical-align: middle;" />
+								</a>
+								<a href="https://x.com/yourcompany" target="_blank">
+									<img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" alt="X (Twitter)"
+										width="24" height="24" style="vertical-align: middle;" />
+								</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</html>
