@@ -20,7 +20,8 @@ export const addBusinessInquiry = async (req, res) => {
             mobile,
             message
         });
-        sendMail("business_inquiry", "Welcome to Molimor Store", email, {
+        
+        sendMail("business_inquiry", "Thank you for contacting InfoSoft", email, {
             fullName: fname + lname,
             email: email,
             mobile: mobile,
