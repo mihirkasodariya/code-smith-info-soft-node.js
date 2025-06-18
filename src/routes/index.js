@@ -1,3 +1,4 @@
+'use strict'
 import { Router } from "express";
 import auth from "./authRoutes.js";
 import home from "./homeRoutes.js";
@@ -13,6 +14,7 @@ import contact from "./contactRoutes.js";
 import about from "./aboutRoutes.js";
 import gallery from "./galleryRoutes.js";
 import team from "./teamRoutes.js";
+import hireDeveloper from "./hireOurDeveloperRoutes.js";
 
 
 const router = Router();
@@ -30,5 +32,6 @@ router.use("/contact", contact);
 router.use("/about", about);
 router.use("/gallery", gallery);
 router.use("/team", team);
+router.use("/hireDeveloper", hireDeveloper);
 
 export default router;

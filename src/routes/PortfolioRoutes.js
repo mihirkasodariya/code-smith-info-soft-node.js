@@ -7,11 +7,13 @@ import {
     getAllPortfolio,
     updatePortfolio,
     deletePortfolio,
+    getPortfolioById
 } from "../controllers/portfolioController.js";
 
 router.post("/addPortfolio", portfolio, validateAccessToken, addPortfolio);
 router.get("/getAllPortfolio", getAllPortfolio);
 router.put("/updatePortfolio/:id", validateAccessToken, updatePortfolio);
 router.delete("/deletePortfolio/:id", validateAccessToken, deletePortfolio);
+router.get("/getPortfolioById/:id", getPortfolioById);
 
 export default router;

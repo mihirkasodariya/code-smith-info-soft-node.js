@@ -19,8 +19,7 @@ export const aboutUsValidate = Joi.object({
             "string.base": "Filename must be a string.",
             "any.required": "Filename is required in mediaFile.",
         }),
-    })
-    ).min(1).required().messages({
+    })).min(1).required().messages({
         "array.base": "mediaFile must be an array.",
         "array.min": "At least one media file is required.",
         "any.required": "mediaFile is required.",

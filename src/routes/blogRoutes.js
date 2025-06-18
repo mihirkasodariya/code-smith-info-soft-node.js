@@ -6,11 +6,13 @@ import {
     addBlog,
     getAllBlog,
     deleteBlog,
-    updateBlog
+    updateBlog,
+    getBlogById
 } from "../controllers/blogController.js";
 
 router.post("/addBlog", blogImage, validateAccessToken, addBlog);
 router.get("/getAllBlog", getAllBlog);
+router.get("/getBlogById/:id", getBlogById);
 router.delete("/deleteBlog/:id", validateAccessToken, deleteBlog);
 router.delete("/updateBlog/:id", validateAccessToken, updateBlog);
 

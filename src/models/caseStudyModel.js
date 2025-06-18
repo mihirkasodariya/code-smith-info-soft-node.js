@@ -9,7 +9,7 @@ const caseStudySchema = new Schema(
         projectName: { type: String, required: true },
         description: { type: String, required: true },
         mainImage: { type: String, required: true },
-        images: { type: [String], required: true },
+        // images: { type: [String], required: true },
         platform: { type: String, required: true },
         duration: { type: String, required: true },
         industry: { type: String, required: true },
@@ -39,7 +39,6 @@ const caseStudySchema = new Schema(
             },
         ],
         conclusion: { type: [String], required: true },
-        // features: { type: [String], required: true },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true }
@@ -52,48 +51,39 @@ export const caseStudyValidation = Joi.object({
         'string.empty': 'Company logo is required.',
         'any.required': 'Company logo is required.',
     }),
-
     projectName: Joi.string().allow('', null).messages({
         'string.base': 'Project name must be a string.',
     }),
-
     description: Joi.string().required().messages({
         'string.empty': 'Description is required.',
         'any.required': 'Description is required.',
     }),
-
     mainImage: Joi.string().required().messages({
         'string.empty': 'Main image is required.',
         'any.required': 'Main image is required.',
     }),
-
-    images: Joi.array().items(Joi.string().messages({})).min(1).required().messages({
-        'array.base': 'Image must be an array.',
-        'array.min': 'At least one image is required.',
-        'any.required': 'Image is required.',
-    }),
-
+    // images: Joi.array().items(Joi.string().messages({})).min(1).required().messages({
+    //     'array.base': 'Image must be an array.',
+    //     'array.min': 'At least one image is required.',
+    //     'any.required': 'Image is required.',
+    // }),
     platform: Joi.string().required().messages({
         'string.empty': 'Platform is required.',
         'any.required': 'Platform is required.',
     }),
-
     duration: Joi.string().required().messages({
         'string.empty': 'Duration is required.',
         'any.required': 'Duration is required.',
     }),
-
     industry: Joi.string().required().messages({
         'string.empty': 'Industry is required.',
         'any.required': 'Industry is required.',
     }),
-
     problem: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Problem must be an array.',
         'array.min': 'At least one problem is required.',
         'any.required': 'Problem is required.',
     }),
-
     solution: Joi.array().items(Joi.object({
         h: Joi.string().allow('', null).messages({
             'string.base': 'Heading in solution must be a string.',
@@ -104,7 +94,6 @@ export const caseStudyValidation = Joi.object({
     })).messages({
         'array.base': 'Solution must be an array of objects.',
     }),
-
     tech: Joi.array().items(Joi.object({
         techImage: Joi.string().uri().allow('', null).messages({
             'string.uri': 'Tech image must be a valid URL.',
@@ -112,32 +101,26 @@ export const caseStudyValidation = Joi.object({
         techName: Joi.string().allow('', null).messages({
             'string.base': 'Tech name must be a string.',
         }),
-    })
-    ).messages({
+    })).messages({
         'array.base': 'Tech must be an array of objects.',
     }),
-
     devProcess: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Development process must be an array.',
         'array.min': 'At least one development process item is required.',
         'any.required': 'Development process is required.',
     }),
-
     challenges: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Challenges must be an array.',
         'array.min': 'At least one challenge is required.',
         'any.required': 'Challenges are required.',
     }),
-
-    color: Joi.array().items(Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}){1,2}$/).messages({
+    color: Joi.array().items(Joi.string().messages({
         'string.pattern.base': 'Color must be a valid hex code.',
-    })
-    ).min(1).required().messages({
+    })).min(3).required().messages({
         'array.base': 'Color must be an array.',
         'array.min': 'At least one color is required.',
         'any.required': 'Color is required.',
     }),
-
     typography: Joi.array().items(Joi.object({
         name: Joi.string().required().messages({
             'string.empty': 'Typography name is required.',
@@ -148,11 +131,9 @@ export const caseStudyValidation = Joi.object({
             'string.uri': 'CDN must be a valid URL.',
             'any.required': 'Typography CDN is required.',
         }),
-    })
-    ).messages({
+    })).messages({
         'array.base': 'Typography must be an array of objects.',
     }),
-
     conclusion: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Conclusion must be an array.',
         'array.min': 'At least one conclusion point is required.',

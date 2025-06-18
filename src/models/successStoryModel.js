@@ -35,6 +35,7 @@ export const typeValidation = Joi.object({
         "any.only": "Type must be either 'web' or 'mobile'",
     }),
 });
+
 export const idValidation = Joi.object({
     id: Joi.string().length(24).hex().required().messages({
         "string.base": "ID must be a string",

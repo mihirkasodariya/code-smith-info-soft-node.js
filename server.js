@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 import express, { json, urlencoded } from "express";
 import cors from "cors";
 import { join, dirname } from "path";

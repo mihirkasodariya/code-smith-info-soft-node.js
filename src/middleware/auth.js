@@ -1,3 +1,4 @@
+'use strict'
 import jwt from "jsonwebtoken";
 import { authModel } from "../models/authModel.js";
 
@@ -43,16 +44,6 @@ export const validateAccessToken = async (req, res, next) => {
     };
 };
 
-export const authorizeRole = (...allowedRoles) => {
-    return (req, res, next) => {
-        if (!req.user || !allowedRoles.includes(req.user.role)) {
-            return res.status(403).json({ success: false, status: 0, message: "Access Denied" });
-        };
-        next();
-    };
-};
-
-
 export const validateAboutUSFiles = (req, res, next) => {
     const files = req.files?.mediaFile || [];
 
@@ -63,7 +54,6 @@ export const validateAboutUSFiles = (req, res, next) => {
         if (isVideo && file.size > 100 * 1024 * 1024) return true;
         return false;
     });
-
     if (invalidFile) {
         const sizeLimit = invalidFile.mimetype.startsWith('image/') ? '1MB' : '100MB';
         return res.status(400).json({
@@ -72,6 +62,5 @@ export const validateAboutUSFiles = (req, res, next) => {
             data: {}
         });
     }
-
     next();
 };

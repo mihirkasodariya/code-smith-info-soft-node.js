@@ -7,10 +7,12 @@ import {
     getAllCaseStudy,
     updateCaseStudy,
     deleteCaseStudy,
+    getCaseStudyById,
 } from "../controllers/caseStudyController.js";
 
 router.post("/addCaseStudy", caseStudy, validateAccessToken, addCaseStudy);
 router.get("/getAllCaseStudy", getAllCaseStudy);
+router.get("/getCaseStudyById/:id", getCaseStudyById);
 router.put("/updateCaseStudy/:id", validateAccessToken, updateCaseStudy);
 router.delete("/deleteCaseStudy/:id", validateAccessToken, deleteCaseStudy);
 

@@ -3,7 +3,7 @@ import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
 export async function addCareer(req, res) {
-    const { techStackId, jobTitle, location, experience, vacancy, ofcTime, role, skills, benefits } = req.body;
+    const { techStackId, jobTitle, qualification, location, experience, vacancy, ofcTime, role, skills, benefits } = req.body;
     const { error } = careerValidation.validate(req.body);
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
@@ -19,6 +19,7 @@ export async function addCareer(req, res) {
             role,
             skills,
             benefits,
+            qualification
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CAREER, newCareer);
     } catch (error) {
@@ -133,6 +134,21 @@ export async function deleteCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_CAREER, {});
     } catch (error) {
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getCareerById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate({ id });
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
+        };
+        const getCareerById = await careerModel.findById(id);
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CAREER_SINGLE, getCareerById);
+    } catch (error) {
+        console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

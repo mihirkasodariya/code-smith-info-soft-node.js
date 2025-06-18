@@ -50,8 +50,7 @@ export const blogValidation = Joi.object({
         h: Joi.string().optional().messages({
             "string.base": "Heading (h) must be a string.",
         }),
-    })
-    ).required().messages({
+    })).required().messages({
         "array.base": "Details must be an array of objects.",
         "any.required": "Details are required.",
     }),

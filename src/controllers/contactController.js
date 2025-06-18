@@ -1,4 +1,4 @@
-import { inquiryModel, inquiryValidation, idValidation, jobModel, jobValidation } from '../models/contactModel.js';
+import { inquiryModel, inquiryValidation, idValidation, jobModel, jobValidation, getInTouchModel, getInTouchValidation, subscribeUserModel, subscribeUserValidation } from '../models/contactModel.js';
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import sendMail from '../../config/mailer/index.js';
@@ -20,9 +20,11 @@ export const addBusinessInquiry = async (req, res) => {
             mobile,
             message
         });
-        
-        sendMail("business_inquiry", "Thank you for contacting InfoSoft", email, {
-            fullName: fname + lname,
+        const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+        const fullName = `${capitalize(fname)} ${capitalize(lname)}`;
+        sendMail("business_inquiry", "Thanks for reaching out to CodeSmith InfoSoft — we appreciate your interest!", email, {
+            fullName: fullName,
             email: email,
             mobile: mobile,
             message: message,
@@ -75,7 +77,7 @@ export const markInquiry = async (req, res) => {
 
 export const addJobApplication = async (req, res) => {
     try {
-        const { name, email, countryCode, mobile, type, experienceYM, currentSalary, expectedSalary, currentJobLocation, applyPosition } = req.body;
+        const { name, email, mobile, experienceYM, currentSalary, expectedSalary, currentJobLocation, careerId } = req.body;
         const attach = req.file?.filename;
         req.body.attach = attach;
         const { error } = jobValidation.validate(req.body);
@@ -83,11 +85,10 @@ export const addJobApplication = async (req, res) => {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
         const jobData = await jobModel.create({
+            careerId,
             name,
             email,
             mobile,
-            countryCode,
-            type,
             experienceYM,
             currentSalary,
             expectedSalary,
@@ -104,7 +105,7 @@ export const addJobApplication = async (req, res) => {
 
 export const getAllJobApplication = async (req, res) => {
     try {
-        const allJobs = await jobModel.find({ isActive: true });
+        const allJobs = await jobModel.find({ isActive: true }).populate('careerId');
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.JOB_LIST, allJobs);
     } catch (error) {
         console.error(error);
@@ -123,6 +124,84 @@ export const markJobApplication = async (req, res) => {
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_JOB, {});
     } catch (error) {
         console.error(error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const addGetInTouch = async (req, res) => {
+    try {
+        const { fname, lname, email, countryCode, mobile, message } = req.body;
+
+        const { error } = getInTouchValidation.validate(req.body);
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
+        };
+        const getintouch = await getInTouchModel.create({
+            fname,
+            lname,
+            email,
+            countryCode,
+            mobile,
+            message
+        });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_GET_IN_TOUCH, getintouch);
+    } catch (error) {
+        console.error(error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getAllGetInTouch = async (req, res) => {
+    try {
+        const getintouch = await getInTouchModel.find({ isActive: true });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.INQUIRY_LIST, getintouch);
+    } catch (error) {
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const markGetInTouch = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate(req.body);
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
+        };
+        await getInTouchModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_GET_IN_TOUCH, {});
+    } catch (error) {
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const addSubscribe = async (req, res) => {
+    const { email } = req.body;
+    const { error } = subscribeUserValidation.validate(req.body);
+    if (error) {
+        return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
+    };
+    try {
+        const alreadyExist = await subscribeUserModel.findOne({ email });
+        if (alreadyExist) {
+            return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_SUCCESS, {});
+        };
+        sendMail("subscribe", "Welcome to CodeSmith InfoSoft! 🎉 Thanks for Subscribing.", email, {
+            fullName: email,
+            base_URL: process.env.BASE_URL
+        });
+        await subscribeUserModel.create({ email });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_SUCCESS, {});
+    } catch (err) {
+        console.error(err);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getAllSubscribe = async (req, res) => {
+    try {
+        const subscribe = await subscribeUserModel.find({ isActive: true });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_LIST, subscribe);
+    } catch (error) {
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

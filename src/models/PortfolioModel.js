@@ -46,7 +46,7 @@ export const portfolioValidation = Joi.object({
         'array.base': 'Features must be an array.',
         'array.min': 'At least one feature is required.',
         'any.required': 'Features are required.',
-    })
+    }),
 });
 
 export const idValidation = Joi.object({

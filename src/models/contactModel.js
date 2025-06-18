@@ -55,8 +55,6 @@ export const inquiryValidation = Joi.object({
         "string.min": "Message must be at least 5 characters long",
         "any.required": "Message is required"
     }),
-    isActive: Joi.boolean().default(true),
-    isMark: Joi.boolean().default(false)
 });
 
 export const idValidation = Joi.object({
@@ -70,16 +68,17 @@ export const idValidation = Joi.object({
 });
 
 const jobSchema = new mongoose.Schema({
+    careerId: { type: Schema.Types.ObjectId, ref: dbTableName.CAREER, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true },
     mobile: { type: String, required: true },
-    type: { type: String, required: true },
+    // type: { type: String, required: true },
     attach: { type: String, required: true },
     experienceYM: { type: String, required: true },
     currentSalary: { type: String, required: true },
     expectedSalary: { type: String, required: true },
     currentJobLocation: { type: String, required: true },
-    applyPosition: { type: String, required: true },
+    // applyPosition: { type: String, required: true },
     isMark: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
 },
@@ -89,6 +88,13 @@ const jobSchema = new mongoose.Schema({
 export const jobModel = model(dbTableName.JOB_APPLICATION, jobSchema);
 
 export const jobValidation = Joi.object({
+    careerId: Joi.string().length(24).hex().required().messages({
+        "string.base": "Career ID must be a string",
+        "string.empty": "Career ID is required",
+        "string.length": "Career ID must be exactly 24 characters",
+        "string.hex": "Career ID must be a valid hexadecimal string",
+        "any.required": "Career ID is required",
+    }),
     name: Joi.string().min(2).max(50).required().messages({
         "string.base": "Name must be a string",
         "string.empty": "Name is required",
@@ -101,19 +107,9 @@ export const jobValidation = Joi.object({
         "string.empty": "Email is required",
         "any.required": "Email is required"
     }),
-    mobile: Joi.string().pattern(/^[0-9]{10}$/).required().messages({
-        "string.pattern.base": "Phone number must be exactly 10 digits",
+    mobile: Joi.string().required().messages({
         "string.empty": "Phone number is required",
         "any.required": "Phone number is required"
-    }),
-    countryCode: Joi.string().pattern(/^\+\d{1,4}$/).required().messages({
-        "string.pattern.base": "Country code must start with + and have up to 4 digits (e.g. +91)",
-        "string.empty": "Country code is required",
-        "any.required": "Country code is required"
-    }),
-    type: Joi.string().required().messages({
-        "string.empty": "Select field is required",
-        "any.required": "Select field is required"
     }),
     experienceYM: Joi.string().required().messages({
         "number.base": "Experience (years) must be a number",
@@ -139,5 +135,70 @@ export const jobValidation = Joi.object({
         'string.base': 'Attachment must be a string.',
         'string.empty': 'Attachment is required.',
         'any.required': 'Please upload an attachment.',
+    }),
+});
+
+
+const getInTouchSchema = new Schema({
+    fname: { type: String, required: true },
+    lname: { type: String, required: true },
+    email: { type: String, required: true },
+    countryCode: { type: String, required: true },
+    mobile: { type: String, required: true },
+    message: { type: String, required: true },
+    isActive: { type: Boolean, default: true },
+    isMark: { type: Boolean, default: false },
+},
+    { timestamps: true }
+);
+
+export const getInTouchModel = model(dbTableName.GET_IN_TOUCH, getInTouchSchema);
+
+export const getInTouchValidation = Joi.object({
+    fname: Joi.string().min(2).max(50).required().messages({
+        "string.base": "First name must be a string",
+        "string.empty": "First name is required",
+        "string.min": "First name must be at least 2 characters",
+        "any.required": "First name is required"
+    }),
+    lname: Joi.string().min(2).max(50).required().messages({
+        "string.base": "Last name must be a string",
+        "string.empty": "Last name is required",
+        "string.min": "Last name must be at least 2 characters",
+        "any.required": "Last name is required"
+    }),
+    email: Joi.string().email().required().messages({
+        "string.email": "Email must be a valid email address",
+        "string.empty": "Email is required",
+        "any.required": "Email is required"
+    }),
+    countryCode: Joi.string().required().messages({
+        "string.empty": "Country Code is required",
+        "any.required": "Country Code is required"
+    }),
+    mobile: Joi.string().pattern(/^[0-9]{7,15}$/).required().messages({
+        "string.pattern.base": "Mobile must be a valid number with 7 to 15 digits",
+        "string.empty": "Mobile number is required",
+        "any.required": "Mobile number is required"
+    }),
+    message: Joi.string().min(5).required().messages({
+        "string.empty": "Message is required",
+        "string.min": "Message must be at least 5 characters long",
+        "any.required": "Message is required"
+    }),
+    isActive: Joi.boolean().default(true),
+});
+
+const subscribeUserSchema = new Schema({
+    email: { type: String, required: true },
+    isActive: { type: Boolean, default: true },
+}, { timestamps: true });
+
+export const subscribeUserModel = model(dbTableName.SUBSCRIBE, subscribeUserSchema);
+
+export const subscribeUserValidation = Joi.object({
+    email: Joi.string().email().required().messages({
+        'string.empty': 'Email is required.',
+        'string.email': 'Invalid email format.'
     }),
 });

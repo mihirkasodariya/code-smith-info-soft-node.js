@@ -16,6 +16,7 @@ export const resMessage = {
     DELETE_SUCCESS_STORY: "Our success story image deleted successfully! It has been removed from your list.",
     ADD_BLOG: "Blog has been published successfully!",
     BLOG_LIST: "Blog list fetched successfully!",
+    BLOG_SINGLE: "Case study fetched successfully!",
     DELETE_BLOG: "Blog deleted successfully! It has been removed from your list.",
     UPDATE_BLOG: "Blog has been updated successfully!",
     ADD_TECH_STACK: "Tech stack has been added successfully!",
@@ -27,13 +28,16 @@ export const resMessage = {
     ADD_CASE_STUDY: "Case study has been published successfully!",
     CASE_STUDY_LIST: "Case study list fetched successfully!",
     UPDATE_CASE_STUDY: "Case study has been updated successfully!",
+    CASE_STUDY_SINGLE: "Case study fetched successfully!",
     DELETE_CASE_STUDY: "Case study deleted successfully! It has been removed from your list.",
     ADD_CAREER: "Career has been published successfully!",
     CAREER_LIST: "careers list fetched successfully!",
+    CAREER_SINGLE: "careers fetched successfully!",
     UPDATE_CAREER: "Career updated successfully.",
     ARCHIVE_CAREER: "Career archived successfully. It is no longer visible to the public.",
     ADD_PORTFOLIO: "Portfolio has been published successfully!",
     PORTFOLIO_LIST: "Portfolio list fetched successfully!",
+    PORTFOLIO_SINGLE: "Portfolio fetched successfully!",
     UPDATE_PORTFOLIO: "Portfolio has been updated successfully!",
     DELETE_PORTFOLIO: "Portfolio deleted successfully! It has been removed from your list.",
     ADD_TESTIMONIALS: "testimonials has been published successfully!",
@@ -58,6 +62,15 @@ export const resMessage = {
     TEAM_LIST: "Team Member fetched successfully!",
     TEAM_SINGLE: "Team Member fetched successfully!",
     DELETE_TEAM: "Team Member deleted successfully! It has been removed from your list.",
+    ADD_GET_IN_TOUCH: "Thank you for reaching out! We've received your message and will get back to you shortly.",
+    MARK_GET_IN_TOUCH: "The get in touch has been successfully marked as reviewed.",
+    SUBSCRIBE_SUCCESS: "Thank you for joining our community! Get ready for the latest blogs, success stories, and more.",
+    SUBSCRIBE_LIST: "subscribing list fetched successfully!",
+    ADD_HIRE_OUR_DEVELOPER: "Hire Our Developer has been published successfully!",
+    HIRE_OUR_DEVELOPER_LIST: "Hire Our Developer list fetched successfully!",
+    UPDATE_HIRE_OUR_DEVELOPER: "Hire Our Developer has been updated successfully!",
+    DELETE_HIRE_OUR_DEVELOPER: "Hire Our Developer deleted successfully! It has been removed from your list.",
+
 
 };
 
@@ -88,7 +101,10 @@ export const dbTableName = {
     JOB_APPLICATION: "job_applications",
     GALLERY: 'gallerys',
     TEAM: 'teams',
-    COMPANY: 'company_details'
+    COMPANY: 'company_details',
+    GET_IN_TOUCH: 'get_in_touchs',
+    SUBSCRIBE: "subscribers",
+    HIRE_DEVELOPER: "hire_developers"
 };
 
 

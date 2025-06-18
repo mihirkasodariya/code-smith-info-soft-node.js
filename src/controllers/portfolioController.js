@@ -96,12 +96,32 @@ export async function deletePortfolio(req, res) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     try {
-       await portfolioModel.findByIdAndUpdate(
+        await portfolioModel.findByIdAndUpdate(
             { _id: id },
             { $set: { isActive: false } },
             { new: false }
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_PORTFOLIO, {});
+    } catch (error) {
+        console.error(error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getPortfolioById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate({ id });
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
+        };
+        const getPortfolioById = await portfolioModel.findById(id);
+        const resData = {
+            ...getPortfolioById._doc,
+            image: `/portfolio/${getPortfolioById.image}`,
+            banner: `/portfolio/${getPortfolioById.banner}`,
+        };
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_SINGLE, resData);
     } catch (error) {
         console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});

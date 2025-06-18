@@ -2,10 +2,12 @@ import Joi from "joi";
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 import { dbTableName } from "../utils/constants.js"
+
 const careerSchema = new Schema(
     {
         techStackId: { type: Schema.Types.ObjectId, ref: dbTableName.TECH_STACK_MASTER, required: true },
         jobTitle: { type: String, required: true },
+        qualification: { type: String, required: true },
         location: { type: String, required: true },
         experience: { type: String, required: true },
         vacancy: { type: Number, required: true },
@@ -33,39 +35,36 @@ export const careerValidation = Joi.object({
         "any.required": "Job title is required",
         "string.base": "Job title must be a string",
     }),
-
+    qualification: Joi.string().required().messages({
+        "any.required": "Qualification  is required",
+        "string.base": "Qualification  must be a string",
+    }),
     location: Joi.string().required().messages({
         "any.required": "Location is required",
         "string.base": "Location must be a string",
     }),
-
     experience: Joi.string().required().messages({
         "any.required": "Experience is required",
         "string.base": "Experience must be a string",
     }),
-
     vacancy: Joi.number().required().messages({
         "any.required": "Vacancy is required",
         "number.base": "Vacancy must be a number",
     }),
-
     ofcTime: Joi.string().required().messages({
         "any.required": "Office time is required",
         "string.base": "Office time must be a string",
     }),
-
     role: Joi.array().items(Joi.string().required()).min(1).required().messages({
         "any.required": "Role is required",
         "array.base": "Role must be an array of strings",
         "array.min": "At least one role must be specified",
     }),
-
     skills: Joi.array().items(Joi.string().required()).min(1).required().messages({
         "any.required": "Skills are required",
         "array.base": "Skills must be an array of strings",
         "array.min": "At least one skill must be specified",
     }),
-
     benefits: Joi.array().items(Joi.string().required()).min(1).required().messages({
         "any.required": "Benefits are required",
         "array.base": "Benefits must be an array of strings",

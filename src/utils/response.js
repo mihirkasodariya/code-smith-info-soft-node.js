@@ -1,6 +1,4 @@
-
-// import { getResponseMessage } from './multiLanguageService.js'
-
+'use strict'
 export default class response {
     static success = (res, status, message, data) => {
         const response = {

@@ -199,3 +199,19 @@ export const teamMember = multer({
     storage: teamMemberStorage,
     limits: { fileSize: 1 * 1024 * 1024 }
 }).single('photo');
+
+const hireOurDeveloperStorage = diskStorage({
+    destination: function (req, file, cb) {
+        const dir = './public/hireOurDeveloper';
+        mkdir(dir, { recursive: true }, (error) => cb(error, dir));
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const first4Chars = file.originalname.slice(0, 4);
+        cb(null, Date.now() + 'hire-our-developer-logo' + first4Chars + ext);
+    },
+});
+export const hireOurDeveloper = multer({
+    storage: hireOurDeveloperStorage,
+    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+}).single('logo');

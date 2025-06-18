@@ -1,6 +1,8 @@
 import { blogModel, blogValidation, idValidation } from "../models/blogModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
+import { subscribeUserModel } from "../models/contactModel.js"
+import sendMail from '../../config/mailer/index.js';
 
 export async function addBlog(req, res) {
     const image = req?.file?.filename;
@@ -17,6 +19,22 @@ export async function addBlog(req, res) {
             details,
             description
         });
+        const subscribeList = await subscribeUserModel.find({ isActive: true })
+
+        const shortDescription = description.split(" ").slice(0, 200).join(" ");
+        await subscribeList.reduce(async (prevPromise, subscriber) => {
+            await prevPromise;
+
+            await sendMail("blog", "📊 New Blog Released by CodeSmith InfoSoft - See What We Built!", subscriber.email, {
+                title: title,
+                mainImage: '/blog/' + image,
+                description: shortDescription,
+                base_URL: process.env.BASE_URL
+            }
+            );
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }, Promise.resolve());
+
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);
     } catch (error) {
         console.error(error);
@@ -55,6 +73,25 @@ export async function getAllBlog(req, res) {
         );
         const techStacks = Array.from(techStackMap.values());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_LIST, { blogs, techStacks });
+    } catch (error) {
+        console.error(error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getBlogById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate({ id });
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
+        };
+        const getBlogById = await blogModel.findById(id);
+        const resData = {
+            ...getBlogById._doc,
+            image: `/blog/${getBlogById.image}`,
+        };
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_SINGLE, resData);
     } catch (error) {
         console.error(error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
