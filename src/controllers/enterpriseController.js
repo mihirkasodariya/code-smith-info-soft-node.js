@@ -1,4 +1,8 @@
-import { enterpriseLogoValidation, idValidation, homeEnterpriseModel } from "../models/enterpriseModel.js";
+import {
+    enterpriseLogoValidation,
+    idValidation,
+    homeEnterpriseModel
+} from "../models/enterpriseModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -10,7 +14,7 @@ export async function addEnterpriseLogo(req, res) {
     };
     try {
         const addEnterpriseLogo = await homeEnterpriseModel.create({
-            image
+            image,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_ENTERPRISE_LOGO, addEnterpriseLogo);
     } catch (error) {

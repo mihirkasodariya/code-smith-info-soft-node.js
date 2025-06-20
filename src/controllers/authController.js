@@ -1,8 +1,12 @@
-import { authModel, authRegisterValidation, authLoginValidation } from "../models/authModel.js";
-import { generateJWToken } from "../middleware/auth.js";
+import {
+    authModel,
+    authRegisterValidation,
+    authLoginValidation
+} from "../models/authModel.js";
 import response from "../utils/response.js";
-import { hash, compare } from "bcrypt";
 import { resStatusCode, resMessage } from "../utils/constants.js";
+import { generateJWToken } from "../middleware/auth.js";
+import { hash, compare } from "bcrypt";
 
 export async function register(req, res) {
     const { fullName, email, password } = req.body;
@@ -16,7 +20,11 @@ export async function register(req, res) {
             return response.error(res, resStatusCode.CONFLICT, resMessage.USER_FOUND, {});
         };
         const hashedPassword = await hash(password, 10);
-        const createNewUser = await authModel.create({ fullName, email, password: hashedPassword, });
+        const createNewUser = await authModel.create({
+            fullName,
+            email,
+            password: hashedPassword,
+        });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.USER_REGISTER, { _id: createNewUser._id });
     } catch (error) {
         console.error('Error in register:', error)

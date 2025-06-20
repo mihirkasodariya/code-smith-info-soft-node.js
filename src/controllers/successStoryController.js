@@ -1,4 +1,9 @@
-import { idValidation, successStoryModel, successStoryValidation, typeValidation } from "../models/successStoryModel.js";
+import {
+    idValidation,
+    successStoryModel,
+    successStoryValidation,
+    typeValidation
+} from "../models/successStoryModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -12,7 +17,7 @@ export async function addSuccessStoryImage(req, res) {
     try {
         const addEnterpriseLogo = await successStoryModel.create({
             image,
-            type
+            type,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_SUCCESS_STORY, addEnterpriseLogo);
     } catch (error) {
@@ -50,7 +55,7 @@ export async function deleteSuccessStoryImage(req, res) {
         await successStoryModel.findByIdAndUpdate(
             { _id: id },
             { isActive: false },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_SUCCESS_STORY, {});
     } catch (error) {

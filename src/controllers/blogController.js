@@ -1,4 +1,8 @@
-import { blogModel, blogValidation, idValidation } from "../models/blogModel.js";
+import {
+    blogModel,
+    blogValidation,
+    idValidation
+} from "../models/blogModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import { subscribeUserModel } from "../models/contactModel.js"
@@ -17,7 +21,7 @@ export async function addBlog(req, res) {
             image,
             title,
             details,
-            description
+            description,
         });
         const subscribeList = await subscribeUserModel.find({ isActive: true })
 
@@ -29,12 +33,11 @@ export async function addBlog(req, res) {
                 title: title,
                 mainImage: '/blog/' + image,
                 description: shortDescription,
-                base_URL: process.env.BASE_URL
-            }
+                base_URL: process.env.BASE_URL,
+            },
             );
             await new Promise(resolve => setTimeout(resolve, 3000));
         }, Promise.resolve());
-
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);
     } catch (error) {
         console.error('Error in addBlog:', error)

@@ -1,4 +1,8 @@
-import { caseStudyModel, caseStudyValidation, idValidation } from "../models/caseStudyModel.js";
+import {
+    caseStudyModel,
+    caseStudyValidation,
+    idValidation
+} from "../models/caseStudyModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import { subscribeUserModel } from "../models/contactModel.js"
@@ -44,11 +48,10 @@ export async function addCaseStudy(req, res) {
                 mainImage: '/caseStudy/' + mainImage,
                 description: shortDescription,
                 base_URL: process.env.BASE_URL
-            }
+            },
             );
             await new Promise(resolve => setTimeout(resolve, 3000));
         }, Promise.resolve());
-
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CASE_STUDY, newCaseStudy);
     } catch (error) {
         console.error('Error in addCaseStudy:', error)

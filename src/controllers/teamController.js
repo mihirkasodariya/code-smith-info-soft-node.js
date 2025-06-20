@@ -1,4 +1,8 @@
-import { teamModel, teamValidation, idValidation } from "../models/teamModel.js";
+import {
+    teamModel,
+    teamValidation,
+    idValidation
+} from "../models/teamModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -82,7 +86,6 @@ export const deleteTeamMember = async (req, res) => {
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
         };
-
         await teamModel.findByIdAndUpdate(id, { isActive: false }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_TEAM, {});
     } catch (error) {

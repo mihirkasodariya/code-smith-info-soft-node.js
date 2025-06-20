@@ -19,7 +19,10 @@ export async function addAboutUS(req, res) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
         };
         const createPromises = files.map((file) => {
-            return aboutUSModel.create({ mediaFile: file.filename, type });
+            return aboutUSModel.create({
+                mediaFile: file.filename,
+                type,
+            });
         });
         const savedMedias = await Promise.all(createPromises);
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_MEDIA_FILE, savedMedias);
@@ -54,7 +57,7 @@ export async function deleteAboutUS(req, res) {
         await aboutUSModel.findByIdAndUpdate(
             { _id: id },
             { $set: { isActive: false } },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_MEDIA_FILE, {});
     } catch (error) {

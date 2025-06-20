@@ -1,4 +1,8 @@
-import { hireDeveloperModel, hireDeveloperValidation, idValidation } from "../models/hireDeveloperModel.js";
+import {
+    hireDeveloperModel,
+    hireDeveloperValidation,
+    idValidation
+} from "../models/hireDeveloperModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -13,7 +17,7 @@ export async function addHireOurDeveloper(req, res) {
         const addHireOurDeveloper = await hireDeveloperModel.create({
             logo,
             title,
-            url
+            url,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_HIRE_OUR_DEVELOPER, addHireOurDeveloper);
     } catch (error) {
@@ -48,7 +52,7 @@ export async function updateHireOurDevelopers(req, res) {
         await hireDeveloperModel.findByIdAndUpdate(
             { _id: id },
             { $set: updateData },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_HIRE_OUR_DEVELOPER, {});
     } catch (error) {
@@ -67,7 +71,7 @@ export async function deleteHireOurDevelopers(req, res) {
         await hireDeveloperModel.findByIdAndUpdate(
             { _id: id },
             { isActive: false },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_HIRE_OUR_DEVELOPER, {});
     } catch (error) {

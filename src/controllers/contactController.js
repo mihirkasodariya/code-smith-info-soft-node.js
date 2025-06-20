@@ -1,4 +1,14 @@
-import { inquiryModel, inquiryValidation, idValidation, jobModel, jobValidation, getInTouchModel, getInTouchValidation, subscribeUserModel, subscribeUserValidation } from '../models/contactModel.js';
+import {
+    inquiryModel,
+    inquiryValidation,
+    idValidation,
+    jobModel,
+    jobValidation,
+    getInTouchModel,
+    getInTouchValidation,
+    subscribeUserModel,
+    subscribeUserValidation
+} from '../models/contactModel.js';
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import sendMail from '../../config/mailer/index.js';
@@ -17,7 +27,7 @@ export const addBusinessInquiry = async (req, res) => {
             email,
             type,
             mobile,
-            message
+            message,
         });
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
@@ -27,9 +37,9 @@ export const addBusinessInquiry = async (req, res) => {
             email: email,
             mobile: mobile,
             message: message,
-            base_URL: process.env.BASE_URL
-        });
-
+            base_URL: process.env.BASE_URL,
+        },
+        );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);
     } catch (error) {
         console.error('Error in addBusinessInquiry:', error)
@@ -95,7 +105,7 @@ export const addJobApplication = async (req, res) => {
             currentSalary,
             expectedSalary,
             currentJobLocation,
-            attach
+            attach,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_JOB, jobData);
     } catch (error) {

@@ -1,4 +1,8 @@
-import { galleryModel, galleryValidation, idValidation } from "../models/galleryModel.js";
+import {
+    galleryModel,
+    galleryValidation,
+    idValidation
+} from "../models/galleryModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -47,7 +51,7 @@ export async function deleteGallery(req, res) {
         await galleryModel.findByIdAndUpdate(
             id,
             { isActive: false },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_GALLERY, {});
     } catch (error) {

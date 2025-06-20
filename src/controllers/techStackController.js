@@ -1,7 +1,12 @@
-import { techStackModel, techStackValidation, idValidation, updateTechStackValidation } from "../models/techStackModel.js";
-import { blogModel } from "../models/blogModel.js";
+import {
+    techStackModel,
+    techStackValidation,
+    idValidation,
+    updateTechStackValidation
+} from "../models/techStackModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
+import { blogModel } from "../models/blogModel.js";
 
 export async function addTechStack(req, res) {
     const { name, bgColor, textColor } = req.body;
@@ -17,7 +22,7 @@ export async function addTechStack(req, res) {
         const addTechStack = await techStackModel.create({
             name,
             bgColor,
-            textColor
+            textColor,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TECH_STACK, addTechStack);
     } catch (error) {

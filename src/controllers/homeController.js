@@ -1,4 +1,8 @@
-import { homeBannerModel, homeBannerValidation, idHomeValidation } from "../models/homeModel.js";
+import {
+    homeBannerModel,
+    homeBannerValidation,
+    idHomeValidation
+} from "../models/homeModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -10,7 +14,7 @@ export async function addHomeBanner(req, res) {
     };
     try {
         const addBanner = await homeBannerModel.create({
-            image
+            image,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BANNER, addBanner);
     } catch (error) {
@@ -43,7 +47,7 @@ export async function deleteHomeBanner(req, res) {
         await homeBannerModel.findByIdAndUpdate(
             { _id: id },
             { isActive: false },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_BANNER, {});
     } catch (error) {

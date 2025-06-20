@@ -1,4 +1,8 @@
-import { portfolioModel, portfolioValidation, idValidation } from "../models/PortfolioModel.js";
+import {
+    portfolioModel,
+    portfolioValidation,
+    idValidation
+} from "../models/PortfolioModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -20,7 +24,7 @@ export async function addPortfolio(req, res) {
             description,
             features,
             banner,
-            image
+            image,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_PORTFOLIO, newPortfolio);
     } catch (error) {
@@ -62,7 +66,7 @@ export async function getAllPortfolio(req, res) {
         const techStacks = Array.from(techStackMap.values());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, { portfolio, techStacks });
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllPortfolio:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -84,7 +88,7 @@ export async function updatePortfolio(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_PORTFOLIO, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in updatePortfolio:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -103,7 +107,7 @@ export async function deletePortfolio(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_PORTFOLIO, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deletePortfolio:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -123,7 +127,7 @@ export const getPortfolioById = async (req, res) => {
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_SINGLE, resData);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getPortfolioById:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

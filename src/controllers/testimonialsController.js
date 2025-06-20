@@ -1,4 +1,8 @@
-import { testimonialsModel, testimonialsValidate, idValidation } from "../models/testimonialsModel.js";
+import {
+    testimonialsModel,
+    testimonialsValidate,
+    idValidation
+} from "../models/testimonialsModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -17,7 +21,7 @@ export async function addTestimonials(req, res) {
             rating,
             image,
             bgColor,
-            textColor
+            textColor,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TESTIMONIALS, newtestimonials);
     } catch (error) {

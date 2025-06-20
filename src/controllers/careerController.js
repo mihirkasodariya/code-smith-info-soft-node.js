@@ -1,6 +1,10 @@
-import { careerModel, careerValidation, idValidation } from "../models/careerModel.js";
-import response from "../utils/response.js";
+import {
+    careerModel,
+    careerValidation,
+    idValidation
+} from "../models/careerModel.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
+import response from "../utils/response.js";
 
 export async function addCareer(req, res) {
     const { techStackId, jobTitle, qualification, location, experience, vacancy, ofcTime, role, skills, benefits } = req.body;
