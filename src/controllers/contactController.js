@@ -170,7 +170,6 @@ export const markGetInTouch = async (req, res) => {
         await getInTouchModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_GET_IN_TOUCH, {});
     } catch (error) {
-        
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
