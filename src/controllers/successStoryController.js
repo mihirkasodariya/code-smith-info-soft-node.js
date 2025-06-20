@@ -16,7 +16,7 @@ export async function addSuccessStoryImage(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_SUCCESS_STORY, addEnterpriseLogo);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addSuccessStoryImage:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -28,14 +28,14 @@ export async function getAllSuccessStoryImage(req, res) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     try {
-        const getAllSuccessStory = await successStoryModel.find({ isActive: true, type: type });
+        const getAllSuccessStory = await successStoryModel.find({ isActive: true, type: type }).sort({ createdAt: -1 });
         const chnageImageResponse = getAllSuccessStory.map((image) => ({
             ...image._doc,
             image: `/successStory/${image.image}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUCCESS_STORY_LIST, chnageImageResponse);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllSuccessStoryImage:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -54,7 +54,7 @@ export async function deleteSuccessStoryImage(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_SUCCESS_STORY, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteSuccessStoryImage:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

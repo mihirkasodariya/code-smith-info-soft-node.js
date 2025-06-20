@@ -2,7 +2,6 @@ import { teamModel, teamValidation, idValidation } from "../models/teamModel.js"
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-// addTeamMember
 export const addTeamMember = async (req, res) => {
     try {
         let photo = req?.file?.filename;
@@ -18,7 +17,7 @@ export const addTeamMember = async (req, res) => {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TEAM, newTeam);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addTeamMember:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -38,13 +37,14 @@ export async function updateTeamMember(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_TEAM, {});
     } catch (error) {
+        console.error('Error in updateTeamMember:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export const getAllTeamMember = async (req, res) => {
     try {
-        let teams = await teamModel.find({ isActive: true }).sort({ createdAt: -1 });
+        let teams = await teamModel.find({ isActive: true }).sort({ createdAt: -1 }).sort({ createdAt: -1 });
         teams = teams.map((item) => {
             if (item.photo) {
                 item.photo = `/teamMember/${item.photo}`;
@@ -53,7 +53,7 @@ export const getAllTeamMember = async (req, res) => {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TEAM_LIST, teams);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllTeamMember:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -70,7 +70,7 @@ export const getTeamMemberById = async (req, res) => {
         if (team.photo) team.photo = `/teamMember/${team?.photo}`;
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TEAM_SINGLE, team);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getTeamMemberById:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -82,11 +82,11 @@ export const deleteTeamMember = async (req, res) => {
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
         };
-        
+
         await teamModel.findByIdAndUpdate(id, { isActive: false }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_TEAM, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteTeamMember:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

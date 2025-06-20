@@ -9,7 +9,6 @@ const caseStudySchema = new Schema(
         projectName: { type: String, required: true },
         description: { type: String, required: true },
         mainImage: { type: String, required: true },
-        // images: { type: [String], required: true },
         platform: { type: String, required: true },
         duration: { type: String, required: true },
         industry: { type: String, required: true },
@@ -45,7 +44,6 @@ const caseStudySchema = new Schema(
 );
 export const caseStudyModel = model(dbTableName.CASE_STUDY, caseStudySchema);
 
-
 export const caseStudyValidation = Joi.object({
     companyLogo: Joi.string().required().messages({
         'string.empty': 'Company logo is required.',
@@ -62,11 +60,6 @@ export const caseStudyValidation = Joi.object({
         'string.empty': 'Main image is required.',
         'any.required': 'Main image is required.',
     }),
-    // images: Joi.array().items(Joi.string().messages({})).min(1).required().messages({
-    //     'array.base': 'Image must be an array.',
-    //     'array.min': 'At least one image is required.',
-    //     'any.required': 'Image is required.',
-    // }),
     platform: Joi.string().required().messages({
         'string.empty': 'Platform is required.',
         'any.required': 'Platform is required.',

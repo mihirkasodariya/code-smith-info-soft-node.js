@@ -1,4 +1,8 @@
-import { aboutUSModel, aboutUsValidate, idValidation } from "../models/aboutModel.js";
+import {
+    aboutUSModel,
+    aboutUsValidate,
+    idValidation
+} from "../models/aboutModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
@@ -19,7 +23,8 @@ export async function addAboutUS(req, res) {
         });
         const savedMedias = await Promise.all(createPromises);
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_MEDIA_FILE, savedMedias);
-    } catch (err) {
+    } catch (error) {
+        console.error('Error in addAboutUS:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -27,14 +32,14 @@ export async function addAboutUS(req, res) {
 export async function getAllAboutUS(req, res) {
     const { type } = req.params;
     try {
-        const aboutUSList = await aboutUSModel.find({ isActive: true, type });
+        const aboutUSList = await aboutUSModel.find({ isActive: true, type }).sort({ createdAt: -1 });
         const chnageImageResponse = aboutUSList.map((data) => ({
             ...data._doc,
             mediaFile: `/aboutUS/${data.mediaFile}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MEDIA_FILE_LIST, chnageImageResponse);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllAboutUS:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -53,7 +58,7 @@ export async function deleteAboutUS(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_MEDIA_FILE, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteAboutUS:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

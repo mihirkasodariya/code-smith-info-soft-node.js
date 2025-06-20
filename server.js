@@ -19,9 +19,8 @@ app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 
-app.use("/api", router.default);
-
 app.use(express.static(join(__dirname, "public")));
+app.use("/api", router.default);
 
 app.listen(port, () => {
   console.log("Server is running on port", port);

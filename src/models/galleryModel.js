@@ -10,8 +10,6 @@ const gallerySchema = new Schema({
 },
     { timestamps: true }
 );
-
-
 export const galleryModel = model(dbTableName.GALLERY, gallerySchema);
 
 export const galleryValidation = Joi.object({

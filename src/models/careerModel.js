@@ -22,7 +22,6 @@ const careerSchema = new Schema(
 );
 export const careerModel = model(dbTableName.CAREER, careerSchema);
 
-
 export const careerValidation = Joi.object({
     techStackId: Joi.string().length(24).hex().required().messages({
         "string.base": "TechStack ID must be a string",

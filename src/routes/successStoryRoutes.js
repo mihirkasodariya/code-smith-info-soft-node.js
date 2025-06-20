@@ -13,5 +13,4 @@ router.post("/addSuccessStoryImage", successStoryImage, validateAccessToken, add
 router.get("/getAllSuccessStoryImage", getAllSuccessStoryImage);
 router.delete("/deleteSuccessStoryImage/:id", validateAccessToken, deleteSuccessStoryImage);
 
-
 export default router;

@@ -70,8 +70,6 @@ export const resMessage = {
     HIRE_OUR_DEVELOPER_LIST: "Hire Our Developer list fetched successfully!",
     UPDATE_HIRE_OUR_DEVELOPER: "Hire Our Developer has been updated successfully!",
     DELETE_HIRE_OUR_DEVELOPER: "Hire Our Developer deleted successfully! It has been removed from your list.",
-
-
 };
 
 export const resStatusCode = {
@@ -106,5 +104,3 @@ export const dbTableName = {
     SUBSCRIBE: "subscribers",
     HIRE_DEVELOPER: "hire_developers"
 };
-
-

@@ -24,14 +24,14 @@ export async function addPortfolio(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_PORTFOLIO, newPortfolio);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addPortfolio:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllPortfolio(req, res) {
     try {
-        const portfolioData = await portfolioModel.find({ isActive: true }).populate('techStackId');
+        const portfolioData = await portfolioModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
         const { portfolio, techStackMap } = portfolioData.reduce(
             (acc, data) => {
                 const { techStackId, image, banner, ...rest } = data._doc;

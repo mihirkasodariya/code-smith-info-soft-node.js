@@ -17,21 +17,21 @@ export async function addHireOurDeveloper(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_HIRE_OUR_DEVELOPER, addHireOurDeveloper);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addHireOurDeveloper:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllHireOurDevelopers(req, res) {
     try {
-        const hireDevelopersList = await hireDeveloperModel.find({ isActive: true });
+        const hireDevelopersList = await hireDeveloperModel.find({ isActive: true }).sort({ createdAt: -1 });
         const chnageImageResponse = hireDevelopersList.map((data) => ({
             ...data._doc,
             logo: `/hireOurDeveloper/${data.logo}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.HIRE_OUR_DEVELOPER_LIST, chnageImageResponse);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllHireOurDevelopers:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -52,7 +52,7 @@ export async function updateHireOurDevelopers(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_HIRE_OUR_DEVELOPER, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in updateHireOurDevelopers:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -71,7 +71,7 @@ export async function deleteHireOurDevelopers(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_HIRE_OUR_DEVELOPER, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteHireOurDevelopers:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

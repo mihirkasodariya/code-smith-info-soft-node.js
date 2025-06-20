@@ -37,14 +37,14 @@ export async function addBlog(req, res) {
 
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addBlog:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllBlog(req, res) {
     try {
-        const blogsData = await blogModel.find({ isActive: true }).populate('techStackId');
+        const blogsData = await blogModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
         const { blogs, techStackMap } = blogsData.reduce(
             (acc, blog) => {
                 const { techStackId, image, ...rest } = blog._doc;
@@ -74,7 +74,7 @@ export async function getAllBlog(req, res) {
         const techStacks = Array.from(techStackMap.values());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_LIST, { blogs, techStacks });
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllBlog:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -93,7 +93,7 @@ export const getBlogById = async (req, res) => {
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_SINGLE, resData);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getBlogById:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -114,7 +114,7 @@ export async function updateBlog(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_BLOG, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in updateBlog:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -133,7 +133,7 @@ export async function deleteBlog(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_BLOG, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteBlog:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

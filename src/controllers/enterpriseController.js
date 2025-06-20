@@ -14,21 +14,21 @@ export async function addEnterpriseLogo(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_ENTERPRISE_LOGO, addEnterpriseLogo);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addEnterpriseLogo:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllEnterpriseLogo(req, res) {
     try {
-        const getAllLogo = await homeEnterpriseModel.find({ isActive: true });
+        const getAllLogo = await homeEnterpriseModel.find({ isActive: true }).sort({ createdAt: -1 });
         const chnageLogoResponse = getAllLogo.map((logo) => ({
             ...logo._doc,
             image: `/enterpriseLogo/${logo.image}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.LOGO_LIST, chnageLogoResponse);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllEnterpriseLogo:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -47,7 +47,7 @@ export async function deleteEnterpriseLogo(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_LOGO, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteEnterpriseLogo:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

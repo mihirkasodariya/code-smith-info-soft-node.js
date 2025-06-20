@@ -1,4 +1,7 @@
 import express from 'express';
+const router = express.Router();
+import { validateAccessToken } from "../middleware/auth.js";
+import { jobApplicationPDF } from '../utils/multer.js';
 import {
     addBusinessInquiry,
     getAllInquiries,
@@ -13,21 +16,15 @@ import {
     getAllSubscribe,
     markGetInTouch,
 } from '../controllers/contactController.js';
-import { validateAccessToken } from "../middleware/auth.js";
-import { jobApplicationPDF } from '../utils/multer.js';
-
-const router = express.Router();
 
 router.post('/addBusinessInquiry', addBusinessInquiry);
 router.get('/getAllInquiries', validateAccessToken, getAllInquiries);
 router.get('/getInquiry/:id', validateAccessToken, getInquiry);
 router.put('/markInquiry/:id', validateAccessToken, markInquiry);
 
-
 router.post('/addJobApplication', jobApplicationPDF, addJobApplication);
 router.get('/getAllJobApplication', validateAccessToken, getAllJobApplication);
 router.put('/markJobApplication/:id', validateAccessToken, markJobApplication);
-
 
 router.post('/addGetInTouch', addGetInTouch);
 router.get('/getAllGetInTouch', validateAccessToken, getAllGetInTouch);

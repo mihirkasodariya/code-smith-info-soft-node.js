@@ -7,10 +7,8 @@ import sendMail from '../../config/mailer/index.js';
 export async function addCaseStudy(req, res) {
     const companyLogo = req.files?.companyLogo?.[0]?.filename || '';
     const mainImage = req.files?.mainImage?.[0]?.filename || '';
-    // const images = req.files?.images?.map((img) => img.filename) || [];
     req.body.companyLogo = companyLogo;
     req.body.mainImage = mainImage;
-    // req.body.images = images;
     const { projectName, description, platform, duration, industry, problem, solution, tech, devProcess, challenges, color, typography, conclusion } = req.body;
 
     const { error } = caseStudyValidation.validate(req.body);
@@ -34,7 +32,6 @@ export async function addCaseStudy(req, res) {
             conclusion,
             companyLogo,
             mainImage,
-            // images,
         });
         const subscribeList = await subscribeUserModel.find({ isActive: true })
 
@@ -54,23 +51,22 @@ export async function addCaseStudy(req, res) {
 
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CASE_STUDY, newCaseStudy);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addCaseStudy:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllCaseStudy(req, res) {
     try {
-        const caseStudyList = await caseStudyModel.find({ isActive: true });
+        const caseStudyList = await caseStudyModel.find({ isActive: true }).sort({ createdAt: -1 });
         const chnageImageResponse = caseStudyList.map((data) => ({
             ...data._doc,
             companyLogo: `/caseStudy/${data.companyLogo}`,
             mainImage: `/caseStudy/${data.mainImage}`,
-            // images: `/caseStudy/${data.images}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, chnageImageResponse);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllCaseStudy:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -84,7 +80,6 @@ export async function updateCaseStudy(req, res) {
     };
     req.files?.companyLogo?.[0]?.filename && (updateData.companyLogo = req.files.companyLogo[0].filename);
     req.files?.mainImage?.[0]?.filename && (updateData.mainImage = req.files.mainImage[0].filename);
-    req.files?.images?.length && (updateData.images = req.files.images.map((f) => f.filename));
     try {
         await caseStudyModel.findByIdAndUpdate(
             { _id: id },
@@ -93,7 +88,7 @@ export async function updateCaseStudy(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_CASE_STUDY, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in updateCaseStudy:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -113,7 +108,7 @@ export const getCaseStudyById = async (req, res) => {
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_SINGLE, resData);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getCaseStudyById:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -132,7 +127,7 @@ export async function deleteCaseStudy(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_CASE_STUDY, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteCaseStudy:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

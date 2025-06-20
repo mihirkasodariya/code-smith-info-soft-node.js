@@ -36,9 +36,7 @@ const sendMail = async (template, subject, email, emailData, from = process.env.
     return result;
   } catch (error) {
     console.error(`Error sending email to ${email} with subject "${subject}":`, error);
-
     return error;
   };
 };
-
 export default sendMail;

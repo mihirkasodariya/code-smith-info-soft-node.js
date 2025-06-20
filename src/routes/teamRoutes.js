@@ -1,4 +1,7 @@
 import express from "express";
+const router = express.Router();
+import { validateAccessToken } from "../middleware/auth.js";
+import { teamMember } from "../utils/multer.js";
 import {
     addTeamMember,
     updateTeamMember,
@@ -6,10 +9,6 @@ import {
     getTeamMemberById,
     deleteTeamMember
 } from "../controllers/teamController.js";
-import { validateAccessToken } from "../middleware/auth.js";
-import { teamMember } from "../utils/multer.js";
-
-const router = express.Router();
 
 router.post("/addTeamMember", validateAccessToken, teamMember, addTeamMember);
 router.put("/updateTeamMember/:id", validateAccessToken, teamMember, updateTeamMember);

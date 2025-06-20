@@ -16,5 +16,4 @@ router.get("/getBlogById/:id", getBlogById);
 router.delete("/deleteBlog/:id", validateAccessToken, deleteBlog);
 router.delete("/updateBlog/:id", validateAccessToken, updateBlog);
 
-
 export default router;

@@ -4,9 +4,9 @@ export default class response {
         const response = {
             success: true,
             status: status,
-            message: message || 'success',
+            message: message || 'Success : Operation successful.',
             data: data || {}
-        }
+        };
         return res.status(status || 200).json(response);
     };
 
@@ -14,9 +14,9 @@ export default class response {
         const response = {
             success: false,
             status: status || 403,
-            message: message || 'error',
+            message: message || 'Error : Request failed.',
             data: data || {}
-        }
+        };
         return res.status(status || 200).json(response);
     };
 };

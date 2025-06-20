@@ -18,6 +18,7 @@ export const addGallery = async (req, res) => {
         const saved = await galleryModel.insertMany(imagesToInsert);
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_GALLERY, saved);
     } catch (error) {
+        console.error('Error in addGallery:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -31,6 +32,7 @@ export const getAllGallery = async (req, res) => {
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.GALLERY_LIST, galleryWithPath);
     } catch (error) {
+        console.error('Error in getAllGallery:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -49,6 +51,7 @@ export async function deleteGallery(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_GALLERY, {});
     } catch (error) {
+        console.error('Error in deleteGallery:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

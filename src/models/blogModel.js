@@ -56,7 +56,6 @@ export const blogValidation = Joi.object({
     }),
 });
 
-
 export const idValidation = Joi.object({
     id: Joi.string().length(24).hex().required().messages({
         "string.base": "ID must be a string",

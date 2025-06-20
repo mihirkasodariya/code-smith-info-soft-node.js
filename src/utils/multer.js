@@ -69,6 +69,7 @@ export const blogImage = multer({
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
 }).single('image');
 
+
 const caseStudyStorage = diskStorage({
     destination: function (req, file, cb) {
         const dir = './public/caseStudy';
@@ -80,7 +81,6 @@ const caseStudyStorage = diskStorage({
         cb(null, Date.now() + 'case-study' + first4Chars + ext);
     },
 });
-
 export const caseStudy = multer({
     storage: caseStudyStorage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
@@ -102,7 +102,6 @@ const portfolioStorage = diskStorage({
         cb(null, Date.now() + 'portfolio' + first4Chars + ext);
     },
 });
-
 export const portfolio = multer({
     storage: portfolioStorage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
@@ -128,6 +127,7 @@ export const testimonials = multer({
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
 }).single('image');
 
+
 const aboutUSStorage = diskStorage({
     destination: function (req, file, cb) {
         const dir = './public/aboutUS';
@@ -145,6 +145,7 @@ export const aboutUS = multer({
     { name: 'mediaFile', maxCount: 4 },
 ]);
 
+
 const jobApplicationPDFStorage = diskStorage({
     destination: function (req, file, cb) {
         const dir = './public/jobApplication';
@@ -156,7 +157,6 @@ const jobApplicationPDFStorage = diskStorage({
         cb(null, Date.now() + '-attach' + name + ext);
     },
 });
-
 export const jobApplicationPDF = multer({
     storage: jobApplicationPDFStorage,
     limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
@@ -166,6 +166,7 @@ export const jobApplicationPDF = multer({
         else cb(new Error('Only PDF files are allowed.'));
     },
 }).single('attach');
+
 
 const galleryStorage = diskStorage({
     destination: function (req, file, cb) {
@@ -199,6 +200,7 @@ export const teamMember = multer({
     storage: teamMemberStorage,
     limits: { fileSize: 1 * 1024 * 1024 }
 }).single('photo');
+
 
 const hireOurDeveloperStorage = diskStorage({
     destination: function (req, file, cb) {

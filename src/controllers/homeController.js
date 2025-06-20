@@ -14,21 +14,21 @@ export async function addHomeBanner(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BANNER, addBanner);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addHomeBanner:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllHomeBanner(req, res) {
     try {
-        const homeBannerList = await homeBannerModel.find({ isActive: true });
+        const homeBannerList = await homeBannerModel.find({ isActive: true }).sort({ createdAt: -1 });
         const chnageImageResponse = homeBannerList.map((banner) => ({
             ...banner._doc,
             image: `/banner/${banner.image}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BANNER_LIST, chnageImageResponse);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllHomeBanner:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -47,7 +47,7 @@ export async function deleteHomeBanner(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_BANNER, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in deleteHomeBanner:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

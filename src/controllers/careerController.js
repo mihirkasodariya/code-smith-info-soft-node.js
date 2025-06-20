@@ -23,14 +23,14 @@ export async function addCareer(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CAREER, newCareer);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addCareer:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllCareer(req, res) {
     try {
-        const getAllCareer = await careerModel.find({ isActive: true, isArchive: false }).populate('techStackId');
+        const getAllCareer = await careerModel.find({ isActive: true, isArchive: false }).populate('techStackId').sort({ createdAt: -1 });
         const { career, techStackMap } = getAllCareer.reduce(
             (acc, data) => {
                 const { techStackId, ...rest } = data._doc;
@@ -59,14 +59,14 @@ export async function getAllCareer(req, res) {
         const techStacks = Array.from(techStackMap.values());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, { career, techStacks });
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllCareer:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function adminGetAllCareer(req, res) {
     try {
-        const careers = await careerModel.find({ isActive: true }).populate('techStackId');
+        const careers = await careerModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
 
         const data = careers.map(({ techStackId, ...rest }) => ({
             ...rest._doc,
@@ -77,7 +77,7 @@ export async function adminGetAllCareer(req, res) {
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CAREER_LIST, data);
     } catch (error) {
-        console.error(error);
+        console.error('Error in adminGetAllCareer:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -97,7 +97,7 @@ export async function updateCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_CAREER, {});
     } catch (error) {
-        console.error("Error deleting tech stack:", error);
+        console.error('Error in updateCareer:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -116,6 +116,7 @@ export async function archiveCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ARCHIVE_CAREER, {});
     } catch (error) {
+        console.error('Error in archiveCareer:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -134,6 +135,7 @@ export async function deleteCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_CAREER, {});
     } catch (error) {
+        console.error('Error in deleteCareer:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -148,7 +150,7 @@ export const getCareerById = async (req, res) => {
         const getCareerById = await careerModel.findById(id);
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CAREER_SINGLE, getCareerById);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getCareerById:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

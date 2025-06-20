@@ -5,7 +5,7 @@ import sendMail from '../../config/mailer/index.js';
 
 export const addBusinessInquiry = async (req, res) => {
     try {
-        const { fname, lname, email, type, countryCode, mobile, message } = req.body;
+        const { fname, lname, email, type, mobile, message } = req.body;
 
         const { error } = inquiryValidation.validate(req.body);
         if (error) {
@@ -16,7 +16,6 @@ export const addBusinessInquiry = async (req, res) => {
             lname,
             email,
             type,
-            countryCode,
             mobile,
             message
         });
@@ -33,16 +32,17 @@ export const addBusinessInquiry = async (req, res) => {
 
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addBusinessInquiry:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export const getAllInquiries = async (req, res) => {
     try {
-        const inquiries = await inquiryModel.find({ isActive: true });
+        const inquiries = await inquiryModel.find({ isActive: true }).sort({ createdAt: -1 });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.INQUIRY_LIST, inquiries);
     } catch (error) {
+        console.error('Error in getAllInquiries:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -57,6 +57,7 @@ export const getInquiry = async (req, res) => {
         const inquiry = await inquiryModel.findOne({ _id: id, isActive: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.INQUIRY_SINGLE, inquiry);
     } catch (error) {
+        console.error('Error in getInquiry:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -71,6 +72,7 @@ export const markInquiry = async (req, res) => {
         await inquiryModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_INQUIRY, {});
     } catch (error) {
+        console.error('Error in markInquiry:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -93,22 +95,21 @@ export const addJobApplication = async (req, res) => {
             currentSalary,
             expectedSalary,
             currentJobLocation,
-            applyPosition,
             attach
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_JOB, jobData);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addJobApplication:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export const getAllJobApplication = async (req, res) => {
     try {
-        const allJobs = await jobModel.find({ isActive: true }).populate('careerId');
+        const allJobs = await jobModel.find({ isActive: true }).populate('careerId').sort({ createdAt: -1 });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.JOB_LIST, allJobs);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllJobApplication:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -123,39 +124,38 @@ export const markJobApplication = async (req, res) => {
         await jobModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_JOB, {});
     } catch (error) {
-        console.error(error);
+        console.error('Error in markJobApplication:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export const addGetInTouch = async (req, res) => {
     try {
-        const { fname, lname, email, countryCode, mobile, message } = req.body;
+        const { name, email, mobile, message } = req.body;
 
         const { error } = getInTouchValidation.validate(req.body);
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
         const getintouch = await getInTouchModel.create({
-            fname,
-            lname,
+            name,
             email,
-            countryCode,
             mobile,
             message
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_GET_IN_TOUCH, getintouch);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addGetInTouch:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export const getAllGetInTouch = async (req, res) => {
     try {
-        const getintouch = await getInTouchModel.find({ isActive: true });
+        const getintouch = await getInTouchModel.find({ isActive: true }).sort({ createdAt: -1 });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.INQUIRY_LIST, getintouch);
     } catch (error) {
+        console.error('Error in getAllGetInTouch:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -170,6 +170,7 @@ export const markGetInTouch = async (req, res) => {
         await getInTouchModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_GET_IN_TOUCH, {});
     } catch (error) {
+        
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -199,9 +200,10 @@ export const addSubscribe = async (req, res) => {
 
 export const getAllSubscribe = async (req, res) => {
     try {
-        const subscribe = await subscribeUserModel.find({ isActive: true });
+        const subscribe = await subscribeUserModel.find({ isActive: true }).sort({ createdAt: -1 });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_LIST, subscribe);
     } catch (error) {
+        console.error('Error in getAllSubscribe:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

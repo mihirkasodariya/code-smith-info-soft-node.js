@@ -13,6 +13,7 @@ export const generateJWToken = async (payload) => {
         const token = jwt.sign(payload, secret, signOptions);
         return token;
     } catch (error) {
+        console.error("Generate JWT Token Error:", error.message);
         return error;
     };
 };
@@ -61,6 +62,6 @@ export const validateAboutUSFiles = (req, res, next) => {
             message: `${invalidFile.originalname} exceeds ${sizeLimit} limit.`,
             data: {}
         });
-    }
+    };
     next();
 };

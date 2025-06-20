@@ -8,7 +8,6 @@ const inquirySchema = new Schema({
     lname: { type: String, required: true },
     email: { type: String, required: true },
     type: { type: String, required: true },
-    countryCode: { type: String, required: true },
     mobile: { type: String, required: true },
     message: { type: String, required: true },
     isActive: { type: Boolean, default: true },
@@ -41,12 +40,7 @@ export const inquiryValidation = Joi.object({
         "string.empty": "Type is required",
         "any.required": "Type is required"
     }),
-    countryCode: Joi.string().min(1).max(5).required().messages({
-        "string.base": "Country code must be a string",
-        "any.required": "Country code is required"
-    }),
-    mobile: Joi.string().pattern(/^[0-9]{7,15}$/).required().messages({
-        "string.pattern.base": "Mobile must be a valid number with 7 to 15 digits",
+    mobile: Joi.string().required().messages({
         "string.empty": "Mobile number is required",
         "any.required": "Mobile number is required"
     }),
@@ -72,13 +66,11 @@ const jobSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
     mobile: { type: String, required: true },
-    // type: { type: String, required: true },
     attach: { type: String, required: true },
     experienceYM: { type: String, required: true },
     currentSalary: { type: String, required: true },
     expectedSalary: { type: String, required: true },
     currentJobLocation: { type: String, required: true },
-    // applyPosition: { type: String, required: true },
     isMark: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
 },
@@ -127,10 +119,6 @@ export const jobValidation = Joi.object({
         "string.empty": "Current job location is required",
         "any.required": "Current job location is required"
     }),
-    applyPosition: Joi.string().required().messages({
-        "string.empty": "Apply Position is required",
-        "any.required": "Apply Position is required"
-    }),
     attach: Joi.string().required().messages({
         'string.base': 'Attachment must be a string.',
         'string.empty': 'Attachment is required.',
@@ -138,12 +126,9 @@ export const jobValidation = Joi.object({
     }),
 });
 
-
 const getInTouchSchema = new Schema({
-    fname: { type: String, required: true },
-    lname: { type: String, required: true },
+    name: { type: String, required: true },
     email: { type: String, required: true },
-    countryCode: { type: String, required: true },
     mobile: { type: String, required: true },
     message: { type: String, required: true },
     isActive: { type: Boolean, default: true },
@@ -151,33 +136,21 @@ const getInTouchSchema = new Schema({
 },
     { timestamps: true }
 );
-
 export const getInTouchModel = model(dbTableName.GET_IN_TOUCH, getInTouchSchema);
 
 export const getInTouchValidation = Joi.object({
-    fname: Joi.string().min(2).max(50).required().messages({
-        "string.base": "First name must be a string",
-        "string.empty": "First name is required",
-        "string.min": "First name must be at least 2 characters",
-        "any.required": "First name is required"
-    }),
-    lname: Joi.string().min(2).max(50).required().messages({
-        "string.base": "Last name must be a string",
-        "string.empty": "Last name is required",
-        "string.min": "Last name must be at least 2 characters",
-        "any.required": "Last name is required"
+    name: Joi.string().min(2).max(50).required().messages({
+        "string.base": "Full name must be a string",
+        "string.empty": "Full name is required",
+        "string.min": "Full name must be at least 2 characters",
+        "any.required": "Full name is required"
     }),
     email: Joi.string().email().required().messages({
         "string.email": "Email must be a valid email address",
         "string.empty": "Email is required",
         "any.required": "Email is required"
     }),
-    countryCode: Joi.string().required().messages({
-        "string.empty": "Country Code is required",
-        "any.required": "Country Code is required"
-    }),
-    mobile: Joi.string().pattern(/^[0-9]{7,15}$/).required().messages({
-        "string.pattern.base": "Mobile must be a valid number with 7 to 15 digits",
+    mobile: Joi.string().required().messages({
         "string.empty": "Mobile number is required",
         "any.required": "Mobile number is required"
     }),
@@ -192,8 +165,9 @@ export const getInTouchValidation = Joi.object({
 const subscribeUserSchema = new Schema({
     email: { type: String, required: true },
     isActive: { type: Boolean, default: true },
-}, { timestamps: true });
-
+},
+    { timestamps: true }
+);
 export const subscribeUserModel = model(dbTableName.SUBSCRIBE, subscribeUserSchema);
 
 export const subscribeUserValidation = Joi.object({

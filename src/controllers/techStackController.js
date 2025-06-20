@@ -21,17 +21,17 @@ export async function addTechStack(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TECH_STACK, addTechStack);
     } catch (error) {
-        console.error(error);
+        console.error('Error in addTechStack:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllTechStack(req, res) {
     try {
-        const getAllTechStack = await techStackModel.find({ isActive: true });
+        const getAllTechStack = await techStackModel.find({ isActive: true }).sort({ createdAt: -1 });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TECH_STACK_LIST, getAllTechStack);
     } catch (error) {
-        console.error(error);
+        console.error('Error in getAllTechStack:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -51,7 +51,7 @@ export async function updateTechStack(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_TECH_STACK, {});
     } catch (error) {
-        console.error("Error deleting tech stack:", error);
+        console.error('Error in updateTechStack:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -74,7 +74,7 @@ export async function deleteTechStack(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_TECH_STACK, {});
     } catch (error) {
-        console.error("Error deleting tech stack:", error);
+        console.error('Error in deleteTechStack:', error)
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

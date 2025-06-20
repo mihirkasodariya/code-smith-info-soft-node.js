@@ -7,7 +7,7 @@ const authRegisterSchema = new Schema(
     {
         fullName: { type: String, required: true },
         email: { type: String, required: true },
-        password: { type: String, default: "" },
+        password: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true }
