@@ -23,5 +23,5 @@ app.use(express.static(join(__dirname, "public")));
 app.use("/api", router.default);
 
 app.listen(port, () => {
-  console.log("→ Port : Server is running on port", port);
+  console.log("→ Port: Server is running on port", port);
 });

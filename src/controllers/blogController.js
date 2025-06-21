@@ -28,14 +28,12 @@ export async function addBlog(req, res) {
         const shortDescription = description.split(" ").slice(0, 200).join(" ");
         await subscribeList.reduce(async (prevPromise, subscriber) => {
             await prevPromise;
-
             await sendMail("blog", "📊 New Blog Released by CodeSmith InfoSoft - See What We Built!", subscriber.email, {
                 title: title,
                 mainImage: '/blog/' + image,
                 description: shortDescription,
                 base_URL: process.env.BASE_URL,
-            },
-            );
+            });
             await new Promise(resolve => setTimeout(resolve, 3000));
         }, Promise.resolve());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);

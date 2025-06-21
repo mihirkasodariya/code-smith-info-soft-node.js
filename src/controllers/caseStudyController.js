@@ -48,8 +48,7 @@ export async function addCaseStudy(req, res) {
                 mainImage: '/caseStudy/' + mainImage,
                 description: shortDescription,
                 base_URL: process.env.BASE_URL
-            },
-            );
+            });
             await new Promise(resolve => setTimeout(resolve, 3000));
         }, Promise.resolve());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CASE_STUDY, newCaseStudy);

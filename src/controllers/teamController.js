@@ -70,7 +70,6 @@ export const getTeamMemberById = async (req, res) => {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
         };
         const team = await teamModel.findById(id);
-        console.log(team)
         if (team.photo) team.photo = `/teamMember/${team?.photo}`;
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TEAM_SINGLE, team);
     } catch (error) {

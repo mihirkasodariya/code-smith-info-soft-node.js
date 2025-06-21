@@ -37,7 +37,7 @@ export const validateAccessToken = async (req, res, next) => {
             return res.status(401).json({ success: false, status: 401, message: "Unauthorized User" });
         };
         req.user = rootUser;
-        console.log("Root User Id : ", req.user.id);
+        console.log("ADMIN ID : ", req.user.id);
         next();
     } catch (error) {
         console.error("JWT Verification Error:", error.message);
