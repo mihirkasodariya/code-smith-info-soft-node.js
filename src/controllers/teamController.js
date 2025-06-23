@@ -1,7 +1,7 @@
 import {
     teamModel,
     teamValidation,
-    idValidation
+    idValidation,
 } from "../models/teamModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -21,7 +21,7 @@ export const addTeamMember = async (req, res) => {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TEAM, newTeam);
     } catch (error) {
-        console.error('Error in addTeamMember:', error)
+        console.error('Error in addTeamMember:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -37,27 +37,54 @@ export async function updateTeamMember(req, res) {
         await teamModel.findByIdAndUpdate(
             id,
             { $set: updateData },
-            { new: false }
+            { new: false },
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_TEAM, {});
     } catch (error) {
-        console.error('Error in updateTeamMember:', error)
+        console.error('Error in updateTeamMember:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export const getAllTeamMember = async (req, res) => {
     try {
-        let teams = await teamModel.find({ isActive: true }).sort({ createdAt: -1 }).sort({ createdAt: -1 });
-        teams = teams.map((item) => {
-            if (item.photo) {
-                item.photo = `/teamMember/${item.photo}`;
-            };
-            return item;
-        });
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TEAM_LIST, teams);
+        const { page, limit } = req.query;
+        const isPaginated = page && limit;
+        const query = { isActive: true };
+        const sort = { createdAt: -1 };
+
+        let teams = [];
+        let totalRecords = 0;
+        let totalPages = 0;
+
+        if (isPaginated) {
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
+            const skip = (pageNum - 1) * limitNum;
+
+            [teams, totalRecords] = await Promise.all([
+                teamModel.find(query).sort(sort).skip(skip).limit(limitNum).lean(),
+                teamModel.countDocuments(query),
+            ]);
+            totalPages = Math.ceil(totalRecords / limitNum);
+        } else {
+            teams = await teamModel.find(query).sort(sort).lean();
+        };
+        const formatted = teams.map(item => ({
+            ...item,
+            photo: item.photo ? `/teamMember/${item.photo}` : "",
+        }));
+        const responseData = isPaginated
+            ? {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalRecords,
+                totalPages,
+                records: formatted,
+            } : formatted;
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TEAM_LIST, responseData);
     } catch (error) {
-        console.error('Error in getAllTeamMember:', error)
+        console.error('Error in getAllTeamMember:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -73,7 +100,7 @@ export const getTeamMemberById = async (req, res) => {
         if (team.photo) team.photo = `/teamMember/${team?.photo}`;
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TEAM_SINGLE, team);
     } catch (error) {
-        console.error('Error in getTeamMemberById:', error)
+        console.error('Error in getTeamMemberById:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -88,7 +115,7 @@ export const deleteTeamMember = async (req, res) => {
         await teamModel.findByIdAndUpdate(id, { isActive: false }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_TEAM, {});
     } catch (error) {
-        console.error('Error in deleteTeamMember:', error)
+        console.error('Error in deleteTeamMember:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

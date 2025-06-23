@@ -8,7 +8,7 @@ const homeBannerSchema = new Schema(
         image: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const homeBannerModel = model(dbTableName.HOME_BANNER, homeBannerSchema);
 

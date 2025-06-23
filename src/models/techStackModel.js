@@ -8,9 +8,9 @@ const techStackSchema = new Schema(
         name: { type: String, required: true },
         bgColor: { type: String, required: true },
         textColor: { type: String, required: true },
-        isActive: { type: Boolean, default: true }
+        isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const techStackModel = model(dbTableName.TECH_STACK_MASTER, techStackSchema);
 

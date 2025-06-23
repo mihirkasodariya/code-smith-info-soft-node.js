@@ -2,7 +2,7 @@ import {
     idValidation,
     successStoryModel,
     successStoryValidation,
-    typeValidation
+    typeValidation,
 } from "../models/successStoryModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -21,7 +21,7 @@ export async function addSuccessStoryImage(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_SUCCESS_STORY, addEnterpriseLogo);
     } catch (error) {
-        console.error('Error in addSuccessStoryImage:', error)
+        console.error('Error in addSuccessStoryImage:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -40,7 +40,7 @@ export async function getAllSuccessStoryImage(req, res) {
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUCCESS_STORY_LIST, chnageImageResponse);
     } catch (error) {
-        console.error('Error in getAllSuccessStoryImage:', error)
+        console.error('Error in getAllSuccessStoryImage:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -59,7 +59,7 @@ export async function deleteSuccessStoryImage(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_SUCCESS_STORY, {});
     } catch (error) {
-        console.error('Error in deleteSuccessStoryImage:', error)
+        console.error('Error in deleteSuccessStoryImage:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

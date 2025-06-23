@@ -1,7 +1,7 @@
 import {
     portfolioModel,
     portfolioValidation,
-    idValidation
+    idValidation,
 } from "../models/PortfolioModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -35,38 +35,60 @@ export async function addPortfolio(req, res) {
 
 export async function getAllPortfolio(req, res) {
     try {
-        const portfolioData = await portfolioModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
-        const { portfolio, techStackMap } = portfolioData.reduce(
-            (acc, data) => {
-                const { techStackId, image, banner, ...rest } = data._doc;
-                acc.portfolio.push({
-                    ...rest,
-                    image: `/portfolio/${image}`,
-                    banner: `/portfolio/${banner}`,
-                    techStackId: techStackId?._id,
-                    techStackName: techStackId?.name,
-                    bgColor: techStackId?.bgColor,
-                    textColor: techStackId?.textColor,
+        const { page, limit } = req.query;
+        const isPaginated = page && limit;
+        const sort = { createdAt: -1 };
+        const query = { isActive: true };
+
+        let portfolioData = [];
+        let totalRecords = 0;
+        let totalPages = 0;
+
+        if (isPaginated) {
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
+            const skip = (pageNum - 1) * limitNum;
+            [portfolioData, totalRecords] = await Promise.all([
+                portfolioModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).skip(skip).limit(limitNum).lean(),
+                portfolioModel.countDocuments(query),
+            ]);
+            totalPages = Math.ceil(totalRecords / limitNum);
+        } else {
+            portfolioData = await portfolioModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).lean();
+        };
+        const techStackMap = new Map();
+        const portfolio = portfolioData.map(data => {
+            const { techStackId, image, banner, ...rest } = data;
+            if (techStackId?._id && !techStackMap.has(String(techStackId._id))) {
+                techStackMap.set(String(techStackId._id), {
+                    techStackId: techStackId._id,
+                    techStackName: techStackId.name,
+                    bgColor: techStackId.bgColor,
+                    textColor: techStackId.textColor,
                 });
-                if (techStackId?._id && !acc.techStackMap.has(String(techStackId._id))) {
-                    acc.techStackMap.set(String(techStackId._id), {
-                        techStackId: techStackId?._id,
-                        techStackName: techStackId?.name,
-                        bgColor: techStackId?.bgColor,
-                        textColor: techStackId?.textColor,
-                    });
-                };
-                return acc;
-            },
-            {
-                portfolio: [],
-                techStackMap: new Map(),
-            },
-        );
+            };
+            return {
+                ...rest,
+                image: `/portfolio/${image}`,
+                banner: `/portfolio/${banner}`,
+                techStackId: techStackId?._id,
+                techStackName: techStackId?.name,
+                bgColor: techStackId?.bgColor,
+                textColor: techStackId?.textColor,
+            };
+        });
         const techStacks = Array.from(techStackMap.values());
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, { portfolio, techStacks });
+        const responseData = isPaginated
+            ? {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalRecords,
+                totalPages,
+                records: portfolio,
+            } : { portfolio, techStacks };
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, responseData);
     } catch (error) {
-        console.error('Error in getAllPortfolio:', error)
+        console.error('Error in getAllPortfolio:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -88,7 +110,7 @@ export async function updatePortfolio(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_PORTFOLIO, {});
     } catch (error) {
-        console.error('Error in updatePortfolio:', error)
+        console.error('Error in updatePortfolio:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -107,7 +129,7 @@ export async function deletePortfolio(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_PORTFOLIO, {});
     } catch (error) {
-        console.error('Error in deletePortfolio:', error)
+        console.error('Error in deletePortfolio:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -127,7 +149,7 @@ export const getPortfolioById = async (req, res) => {
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_SINGLE, resData);
     } catch (error) {
-        console.error('Error in getPortfolioById:', error)
+        console.error('Error in getPortfolioById:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

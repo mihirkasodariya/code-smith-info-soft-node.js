@@ -1,7 +1,7 @@
 import {
     enterpriseLogoValidation,
     idValidation,
-    homeEnterpriseModel
+    homeEnterpriseModel,
 } from "../models/enterpriseModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -18,7 +18,7 @@ export async function addEnterpriseLogo(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_ENTERPRISE_LOGO, addEnterpriseLogo);
     } catch (error) {
-        console.error('Error in addEnterpriseLogo:', error)
+        console.error('Error in addEnterpriseLogo:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -32,7 +32,7 @@ export async function getAllEnterpriseLogo(req, res) {
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.LOGO_LIST, chnageLogoResponse);
     } catch (error) {
-        console.error('Error in getAllEnterpriseLogo:', error)
+        console.error('Error in getAllEnterpriseLogo:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -51,7 +51,7 @@ export async function deleteEnterpriseLogo(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_LOGO, {});
     } catch (error) {
-        console.error('Error in deleteEnterpriseLogo:', error)
+        console.error('Error in deleteEnterpriseLogo:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

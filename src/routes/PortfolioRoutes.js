@@ -7,7 +7,7 @@ import {
     getAllPortfolio,
     updatePortfolio,
     deletePortfolio,
-    getPortfolioById
+    getPortfolioById,
 } from "../controllers/portfolioController.js";
 
 router.post("/addPortfolio", portfolio, validateAccessToken, addPortfolio);

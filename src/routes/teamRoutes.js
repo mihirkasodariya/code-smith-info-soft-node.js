@@ -7,7 +7,7 @@ import {
     updateTeamMember,
     getAllTeamMember,
     getTeamMemberById,
-    deleteTeamMember
+    deleteTeamMember,
 } from "../controllers/teamController.js";
 
 router.post("/addTeamMember", validateAccessToken, teamMember, addTeamMember);

@@ -8,7 +8,7 @@ const homeEnterpriseLogoSchema = new Schema(
         image: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const homeEnterpriseModel = model(dbTableName.HOME_ENTERPRISE_LOGO, homeEnterpriseLogoSchema);
 

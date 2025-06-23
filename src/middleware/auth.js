@@ -1,13 +1,16 @@
 'use strict'
 import jwt from "jsonwebtoken";
 import { authModel } from "../models/authModel.js";
+import response from "../utils/response.js";
+import { resStatusCode, resMessage } from "../utils/constants.js";
+import rateLimit from 'express-rate-limit';
 
 export const generateJWToken = async (payload) => {
     try {
         const secret = process.env.JWT_SECRET;
         const signOptions = {
             issuer: "tracking",
-            expiresIn: "30d",
+            expiresIn: process.env.JWT_EXPIRES_IN,
         };
         payload.creationDateTime = Date.now();
         const token = jwt.sign(payload, secret, signOptions);
@@ -23,45 +26,49 @@ export const validateAccessToken = async (req, res, next) => {
         const token = req.headers.authorization || req.headers.Authorization;
 
         if (!token) {
-            return res.status(401).json({ success: false, status: 401, message: "No token provided!" });
+            return response.error(res, resStatusCode.CLIENT_ERROR, resMessage.NO_TOKEN_PROVIDED, {});
         };
-        const secret = process.env.JWT_SECRET;
-        const verifyOptions = {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET, {
             issuer: "tracking",
-            expiresIn: "30d",
-        };
-        const decodedToken = jwt.verify(token, secret, verifyOptions);
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        });
 
-        const rootUser = await authModel.findById({ _id: decodedToken._id });
-        if (!rootUser) {
-            return res.status(401).json({ success: false, status: 401, message: "Unauthorized User" });
+        const authenticatedUser = await authModel.findById({ _id: decodedToken._id });
+        if (!authenticatedUser) {
+            return response.error(res, resStatusCode.UNAUTHORISED, resMessage.UNAUTHORISED, {});
         };
-        req.user = rootUser;
-        console.log("ADMIN ID : ", req.user.id);
+        req.user = authenticatedUser;
+        console.log("ADMIN ID: ", req.user.id);
         next();
     } catch (error) {
         console.error("JWT Verification Error:", error.message);
-        return res.status(403).json({ success: false, status: 401, message: "Invalid or Expired Token" });
+        if (error.name === "TokenExpiredError") {
+            return response.error(res, resStatusCode.UNAUTHORISED, resMessage.TOKEN_EXPIRED, {});
+        } else if (error.name === "JsonWebTokenError") {
+            return response.error(res, resStatusCode.UNAUTHORISED, resMessage.TOKEN_INVALID, {});
+        } else {
+            return response.error(res, resStatusCode.UNAUTHORISED, resMessage.TOKEN_INVALID, {});
+        };
     };
 };
 
 export const validateAboutUSFiles = (req, res, next) => {
     const files = req.files?.mediaFile || [];
-
-    const invalidFile = files.find((file) => {
-        const isImage = file.mimetype.startsWith('image/');
-        const isVideo = file.mimetype.startsWith('video/');
-        if (isImage && file.size > 1 * 1024 * 1024) return true;
-        if (isVideo && file.size > 100 * 1024 * 1024) return true;
-        return false;
-    });
-    if (invalidFile) {
-        const sizeLimit = invalidFile.mimetype.startsWith('image/') ? '1MB' : '100MB';
-        return res.status(400).json({
-            success: false,
-            message: `${invalidFile.originalname} exceeds ${sizeLimit} limit.`,
-            data: {}
+    try {
+        const invalidFile = files.find((file) => {
+            const isImage = file.mimetype.startsWith('image/');
+            const isVideo = file.mimetype.startsWith('video/');
+            if (isImage && file.size > 1 * 1024 * 1024) return true;
+            if (isVideo && file.size > 100 * 1024 * 1024) return true;
+            return false;
         });
+        if (invalidFile) {
+            const sizeLimit = invalidFile.mimetype.startsWith('image/') ? '1MB' : '100MB';
+            return response.error(res, resStatusCode.CLIENT_ERROR, `${invalidFile.originalname} exceeds ${sizeLimit} limit.`, {});
+        };
+        next();
+    } catch (error) {
+        console.error('Error in validateAboutUSFiles:', error)
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
-    next();
 };

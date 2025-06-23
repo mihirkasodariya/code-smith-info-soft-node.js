@@ -10,7 +10,7 @@ const authRegisterSchema = new Schema(
         password: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const authModel = model(dbTableName.AUTH, authRegisterSchema);
 

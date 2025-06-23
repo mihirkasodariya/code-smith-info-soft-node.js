@@ -7,7 +7,7 @@ import {
     getAllBlog,
     deleteBlog,
     updateBlog,
-    getBlogById
+    getBlogById,
 } from "../controllers/blogController.js";
 
 router.post("/addBlog", blogImage, validateAccessToken, addBlog);

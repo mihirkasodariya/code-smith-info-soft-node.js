@@ -1,7 +1,7 @@
 import {
     testimonialsModel,
     testimonialsValidate,
-    idValidation
+    idValidation,
 } from "../models/testimonialsModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -25,24 +25,52 @@ export async function addTestimonials(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TESTIMONIALS, newtestimonials);
     } catch (error) {
-        console.error('Error in addTestimonials:', error)
+        console.error('Error in addTestimonials:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllTestimonials(req, res) {
     try {
-        const trestimonialsList = await testimonialsModel.find({ isActive: true }).sort({ createdAt: -1 });
-        const chnageImageResponse = trestimonialsList.map((data) => ({
-            ...data._doc,
+        const { page, limit } = req.query;
+        const isPaginated = page && limit;
+        const query = { isActive: true };
+        const sort = { createdAt: -1 };
+
+        let testimonials = [];
+        let totalRecords = 0;
+        let totalPages = 0;
+
+        if (isPaginated) {
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
+            const skip = (pageNum - 1) * limitNum;
+            [testimonials, totalRecords] = await Promise.all([
+                testimonialsModel.find(query).sort(sort).skip(skip).limit(limitNum).lean(),
+                testimonialsModel.countDocuments(query),
+            ]);
+            totalPages = Math.ceil(totalRecords / limitNum);
+        } else {
+            testimonials = await testimonialsModel.find(query).sort(sort).lean();
+        };
+        const formatted = testimonials.map(data => ({
+            ...data,
             image: `/trestimonials/${data.image}`,
         }));
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TESTIMONIALS_LIST, chnageImageResponse);
+        const responseData = isPaginated
+            ? {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalRecords,
+                totalPages,
+                records: formatted,
+            } : formatted;
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TESTIMONIALS_LIST, responseData);
     } catch (error) {
-        console.error('Error in getAllTestimonials:', error)
+        console.error('Error in getAllTestimonials:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
-};;
+};
 
 export async function updateTestimonials(req, res) {
     const { id } = req.params;
@@ -60,7 +88,7 @@ export async function updateTestimonials(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_TESTIMONIALS, {});
     } catch (error) {
-        console.error('Error in updateTestimonials:', error)
+        console.error('Error in updateTestimonials:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -79,7 +107,7 @@ export async function deleteTestimonials(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_TESTIMONIALS, {});
     } catch (error) {
-        console.error('Error in deleteTestimonials:', error)
+        console.error('Error in deleteTestimonials:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

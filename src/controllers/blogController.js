@@ -1,7 +1,7 @@
 import {
     blogModel,
     blogValidation,
-    idValidation
+    idValidation,
 } from "../models/blogModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -38,44 +38,68 @@ export async function addBlog(req, res) {
         }, Promise.resolve());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);
     } catch (error) {
-        console.error('Error in addBlog:', error)
+        console.error('Error in addBlog:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllBlog(req, res) {
     try {
-        const blogsData = await blogModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
-        const { blogs, techStackMap } = blogsData.reduce(
-            (acc, blog) => {
-                const { techStackId, image, ...rest } = blog._doc;
-                acc.blogs.push({
-                    ...rest,
-                    image: `/blog/${image}`,
-                    techStackId: techStackId?._id,
-                    techStackName: techStackId?.name,
-                    bgColor: techStackId?.bgColor,
-                    textColor: techStackId?.textColor,
+        const { page, limit } = req.query;
+        const isPaginated = page && limit;
+        const query = { isActive: true };
+        const sort = { createdAt: -1 };
+
+        let blogsData = [];
+        let totalRecords = 0;
+        let totalPages = 0;
+
+        if (isPaginated) {
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
+            const skip = (pageNum - 1) * limitNum;
+
+            [blogsData, totalRecords] = await Promise.all([
+                blogModel.find(query).populate('techStackId').sort(sort).skip(skip).limit(limitNum),
+                blogModel.countDocuments(query)
+            ]);
+            totalPages = Math.ceil(totalRecords / limitNum);
+        } else {
+            blogsData = await blogModel.find(query).populate('techStackId').sort(sort);
+        };
+        const techStackMap = new Map();
+        const blogs = blogsData.map(blog => {
+            const { techStackId, image, ...rest } = blog._doc;
+            if (techStackId?._id && !techStackMap.has(String(techStackId._id))) {
+                techStackMap.set(String(techStackId._id), {
+                    techStackId: techStackId._id,
+                    techStackName: techStackId.name,
+                    bgColor: techStackId.bgColor,
+                    textColor: techStackId.textColor,
                 });
-                if (techStackId?._id && !acc.techStackMap.has(String(techStackId._id))) {
-                    acc.techStackMap.set(String(techStackId._id), {
-                        techStackId: techStackId?._id,
-                        techStackName: techStackId?.name,
-                        bgColor: techStackId?.bgColor,
-                        textColor: techStackId?.textColor,
-                    });
-                };
-                return acc;
-            },
-            {
-                blogs: [],
-                techStackMap: new Map(),
-            },
-        );
+            };
+            return {
+                ...rest,
+                image: `/blog/${image}`,
+                techStackId: techStackId?._id,
+                techStackName: techStackId?.name,
+                bgColor: techStackId?.bgColor,
+                textColor: techStackId?.textColor,
+            };
+        });
         const techStacks = Array.from(techStackMap.values());
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_LIST, { blogs, techStacks });
+
+        const responseData = isPaginated
+            ? {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalRecords,
+                totalPages,
+                records: blogs,
+            } : { blogs, techStacks };
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_LIST, responseData);
     } catch (error) {
-        console.error('Error in getAllBlog:', error)
+        console.error('Error in getAllBlog:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -94,7 +118,7 @@ export const getBlogById = async (req, res) => {
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.BLOG_SINGLE, resData);
     } catch (error) {
-        console.error('Error in getBlogById:', error)
+        console.error('Error in getBlogById:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -115,7 +139,7 @@ export async function updateBlog(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_BLOG, {});
     } catch (error) {
-        console.error('Error in updateBlog:', error)
+        console.error('Error in updateBlog:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -134,7 +158,7 @@ export async function deleteBlog(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_BLOG, {});
     } catch (error) {
-        console.error('Error in deleteBlog:', error)
+        console.error('Error in deleteBlog:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

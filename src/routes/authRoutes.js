@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import {
     register,
-    login
+    login,
 } from "../controllers/authController.js";
 
 router.post("/register", register);

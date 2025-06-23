@@ -16,9 +16,9 @@ const careerSchema = new Schema(
         skills: { type: [String], required: true },
         benefits: { type: [String], required: true },
         isArchive: { type: Boolean, default: false },
-        isActive: { type: Boolean, default: true }
+        isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const careerModel = model(dbTableName.CAREER, careerSchema);
 

@@ -5,7 +5,7 @@ export default class response {
             success: true,
             status: status,
             message: message || 'Success : Operation successful.',
-            data: data || {}
+            data: data || {},
         };
         return res.status(status || 200).json(response);
     };
@@ -15,7 +15,7 @@ export default class response {
             success: false,
             status: status || 403,
             message: message || 'Error : Request failed.',
-            data: data || {}
+            data: data || {},
         };
         return res.status(status || 200).json(response);
     };

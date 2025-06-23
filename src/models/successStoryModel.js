@@ -9,7 +9,7 @@ const successStorySchema = new Schema(
         type: { type: String, enum: ['web', 'mobile'], required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const successStoryModel = model(dbTableName.SUCCESS_STORY, successStorySchema);
 

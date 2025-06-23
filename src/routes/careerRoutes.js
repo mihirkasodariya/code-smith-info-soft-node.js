@@ -8,7 +8,7 @@ import {
     updateCareer,
     archiveCareer,
     deleteCareer,
-    getCareerById
+    getCareerById,
 } from "../controllers/careerController.js";
 
 router.post("/addCareer", validateAccessToken, addCareer);

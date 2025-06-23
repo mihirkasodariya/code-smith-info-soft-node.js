@@ -5,7 +5,7 @@ import { successStoryImage } from "../utils/multer.js";
 import {
     addSuccessStoryImage,
     deleteSuccessStoryImage,
-    getAllSuccessStoryImage
+    getAllSuccessStoryImage,
 } from "../controllers/successStoryController.js";
 
 //Our Success Stories

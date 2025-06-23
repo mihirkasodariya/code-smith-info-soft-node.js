@@ -8,7 +8,7 @@ const gallerySchema = new Schema({
     image: { type: String, required: true },
     isActive: { type: Boolean, default: true },
 },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const galleryModel = model(dbTableName.GALLERY, gallerySchema);
 
@@ -17,7 +17,7 @@ export const galleryValidation = Joi.object({
         "string.base": "Image path must be a string",
         "string.empty": "Image path is required",
         "any.required": "Image is required"
-    })
+    }),
 });
 
 export const idValidation = Joi.object({

@@ -1,7 +1,7 @@
 import {
     careerModel,
     careerValidation,
-    idValidation
+    idValidation,
 } from "../models/careerModel.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import response from "../utils/response.js";
@@ -27,43 +27,65 @@ export async function addCareer(req, res) {
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CAREER, newCareer);
     } catch (error) {
-        console.error('Error in addCareer:', error)
+        console.error('Error in addCareer:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
 export async function getAllCareer(req, res) {
     try {
-        const getAllCareer = await careerModel.find({ isActive: true, isArchive: false }).populate('techStackId').sort({ createdAt: -1 });
-        const { career, techStackMap } = getAllCareer.reduce(
-            (acc, data) => {
-                const { techStackId, ...rest } = data._doc;
-                acc.career.push({
-                    ...rest,
-                    techStackId: techStackId?._id,
-                    techStackName: techStackId?.name,
-                    bgColor: techStackId?.bgColor,
-                    textColor: techStackId?.textColor,
+        const { page, limit } = req.query;
+        const isPaginated = page && limit;
+        const sort = { createdAt: -1 };
+        const query = isPaginated ? { isActive: true, isArchive: false } : { isActive: true };
+
+        let careerData = [];
+        let totalRecords = 0;
+        let totalPages = 0;
+        
+        if (isPaginated) {
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
+            const skip = (pageNum - 1) * limitNum;
+            [careerData, totalRecords] = await Promise.all([
+                careerModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).skip(skip).limit(limitNum).lean(),
+                careerModel.countDocuments(query),
+            ]);
+            totalPages = Math.ceil(totalRecords / limitNum);
+        } else {
+            careerData = await careerModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).lean();
+        };
+        const techStackMap = new Map();
+        const career = careerData.map(data => {
+            const { techStackId, ...rest } = data;
+            if (techStackId?._id && !techStackMap.has(String(techStackId._id))) {
+                techStackMap.set(String(techStackId._id), {
+                    techStackId: techStackId._id,
+                    techStackName: techStackId.name,
+                    bgColor: techStackId.bgColor,
+                    textColor: techStackId.textColor,
                 });
-                if (techStackId?._id && !acc.techStackMap.has(String(techStackId._id))) {
-                    acc.techStackMap.set(String(techStackId._id), {
-                        techStackId: techStackId?._id,
-                        techStackName: techStackId?.name,
-                        bgColor: techStackId?.bgColor,
-                        textColor: techStackId?.textColor,
-                    });
-                };
-                return acc;
-            },
-            {
-                career: [],
-                techStackMap: new Map(),
-            },
-        );
+            };
+            return {
+                ...rest,
+                techStackId: techStackId?._id,
+                techStackName: techStackId?.name,
+                bgColor: techStackId?.bgColor,
+                textColor: techStackId?.textColor,
+            };
+        });
         const techStacks = Array.from(techStackMap.values());
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, { career, techStacks });
+        const responseData = isPaginated
+            ? {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalRecords,
+                totalPages,
+                records: career,
+            } : { career, techStacks };
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.PORTFOLIO_LIST, responseData);
     } catch (error) {
-        console.error('Error in getAllCareer:', error)
+        console.error('Error in getAllCareer:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -81,7 +103,7 @@ export async function adminGetAllCareer(req, res) {
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CAREER_LIST, data);
     } catch (error) {
-        console.error('Error in adminGetAllCareer:', error)
+        console.error('Error in adminGetAllCareer:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -101,7 +123,7 @@ export async function updateCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_CAREER, {});
     } catch (error) {
-        console.error('Error in updateCareer:', error)
+        console.error('Error in updateCareer:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -120,7 +142,7 @@ export async function archiveCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ARCHIVE_CAREER, {});
     } catch (error) {
-        console.error('Error in archiveCareer:', error)
+        console.error('Error in archiveCareer:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -139,7 +161,7 @@ export async function deleteCareer(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_CAREER, {});
     } catch (error) {
-        console.error('Error in deleteCareer:', error)
+        console.error('Error in deleteCareer:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -154,7 +176,7 @@ export const getCareerById = async (req, res) => {
         const getCareerById = await careerModel.findById(id);
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CAREER_SINGLE, getCareerById);
     } catch (error) {
-        console.error('Error in getCareerById:', error)
+        console.error('Error in getCareerById:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

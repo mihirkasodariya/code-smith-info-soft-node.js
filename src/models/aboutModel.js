@@ -9,7 +9,7 @@ const aboutUSSchema = new Schema(
         type: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const aboutUSModel = model(dbTableName.ABOUT_US, aboutUSSchema);
 

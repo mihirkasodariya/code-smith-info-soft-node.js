@@ -13,7 +13,7 @@ const testimonialsSchema = new Schema(
         textColor: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const testimonialsModel = model(dbTableName.TESTIMONIALS, testimonialsSchema);
 

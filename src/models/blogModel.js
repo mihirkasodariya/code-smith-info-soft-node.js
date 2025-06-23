@@ -13,12 +13,12 @@ const blogSchema = new Schema(
             {
                 _id: false,
                 p: { type: String },
-                h: { type: String }
+                h: { type: String },
             },
         ],
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const blogModel = model(dbTableName.BLOG, blogSchema);
 

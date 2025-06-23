@@ -10,7 +10,7 @@ const hireDeveloperSchema = new Schema(
         url: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const hireDeveloperModel = model(dbTableName.HIRE_DEVELOPER, hireDeveloperSchema);
 

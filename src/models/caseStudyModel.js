@@ -40,7 +40,7 @@ const caseStudySchema = new Schema(
         conclusion: { type: [String], required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const caseStudyModel = model(dbTableName.CASE_STUDY, caseStudySchema);
 

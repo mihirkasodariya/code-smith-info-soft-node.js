@@ -13,7 +13,7 @@ const portfolioSchema = new Schema(
         features: { type: [String], required: true },
         isActive: { type: Boolean, default: true },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 export const portfolioModel = model(dbTableName.PORTFOLIO, portfolioSchema);
 

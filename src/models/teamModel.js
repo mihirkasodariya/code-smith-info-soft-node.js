@@ -13,9 +13,9 @@ const teamSchema = new Schema({
     photo: { type: String, require: true },
     textColor: { type: String },
     bgColor: { type: String },
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
 },
-    { timestamps: true }
+    { timestamps: true },
 );
 
 export const teamModel = model(dbTableName.TEAM, teamSchema);
@@ -54,7 +54,7 @@ export const teamValidation = Joi.object({
     }),
     bgColor: Joi.string().optional().messages({
         "string.pattern.base": "Background color must be a valid hex code (e.g. 000000)"
-    })
+    }),
 });
 
 export const idValidation = Joi.object({

@@ -1,7 +1,7 @@
 import {
     caseStudyModel,
     caseStudyValidation,
-    idValidation
+    idValidation,
 } from "../models/caseStudyModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
@@ -53,22 +53,70 @@ export async function addCaseStudy(req, res) {
         }, Promise.resolve());
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CASE_STUDY, newCaseStudy);
     } catch (error) {
-        console.error('Error in addCaseStudy:', error)
+        console.error('Error in addCaseStudy:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
 
+// export async function getAllCaseStudy(req, res) {
+//     try {
+//         const caseStudyList = await caseStudyModel.find({ isActive: true }).sort({ createdAt: -1 });
+//         const chnageImageResponse = caseStudyList.map((data) => ({
+//             ...data._doc,
+//             companyLogo: `/caseStudy/${data.companyLogo}`,
+//             mainImage: `/caseStudy/${data.mainImage}`,
+//         }));
+//         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, chnageImageResponse);
+//     } catch (error) {
+//         console.error('Error in getAllCaseStudy:', error);
+//         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+//     };
+// };
+
 export async function getAllCaseStudy(req, res) {
     try {
-        const caseStudyList = await caseStudyModel.find({ isActive: true }).sort({ createdAt: -1 });
-        const chnageImageResponse = caseStudyList.map((data) => ({
+        const { page, limit } = req.query;
+        const isPaginated = page && limit;
+        const query = { isActive: true };
+        const sort = { createdAt: -1 };
+
+        let caseStudies = [];
+        let totalCount = 0;
+        let totalPages = 0;
+
+        if (isPaginated) {
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
+            const skip = (pageNum - 1) * limitNum;
+
+            [caseStudies, totalCount] = await Promise.all([
+                caseStudyModel.find(query).sort(sort).skip(skip).limit(limitNum),
+                caseStudyModel.countDocuments(query),
+            ]);
+            totalPages = Math.ceil(totalCount / limitNum);
+            const formattedData = caseStudies.map(data => ({
+                ...data._doc,
+                companyLogo: `/caseStudy/${data.companyLogo}`,
+                mainImage: `/caseStudy/${data.mainImage}`,
+            }));
+            return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, {
+                page: pageNum,
+                limit: limitNum,
+                totalRecords: totalCount,
+                totalPages,
+                records: formattedData,
+            });
+        };
+        caseStudies = await caseStudyModel.find(query).sort(sort);
+
+        const formattedData = caseStudies.map(data => ({
             ...data._doc,
             companyLogo: `/caseStudy/${data.companyLogo}`,
             mainImage: `/caseStudy/${data.mainImage}`,
         }));
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, chnageImageResponse);
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, formattedData);
     } catch (error) {
-        console.error('Error in getAllCaseStudy:', error)
+        console.error('Error in getAllCaseStudy:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -90,7 +138,7 @@ export async function updateCaseStudy(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_CASE_STUDY, {});
     } catch (error) {
-        console.error('Error in updateCaseStudy:', error)
+        console.error('Error in updateCaseStudy:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -110,7 +158,7 @@ export const getCaseStudyById = async (req, res) => {
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_SINGLE, resData);
     } catch (error) {
-        console.error('Error in getCaseStudyById:', error)
+        console.error('Error in getCaseStudyById:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -129,7 +177,7 @@ export async function deleteCaseStudy(req, res) {
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_CASE_STUDY, {});
     } catch (error) {
-        console.error('Error in deleteCaseStudy:', error)
+        console.error('Error in deleteCaseStudy:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

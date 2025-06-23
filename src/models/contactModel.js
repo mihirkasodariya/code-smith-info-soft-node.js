@@ -74,7 +74,7 @@ const jobSchema = new mongoose.Schema({
     isMark: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
 },
-    { timestamps: true }
+    { timestamps: true },
 );
 
 export const jobModel = model(dbTableName.JOB_APPLICATION, jobSchema);

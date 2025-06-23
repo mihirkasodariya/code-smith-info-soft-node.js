@@ -5,7 +5,7 @@ import {
     addTechStack,
     getAllTechStack,
     updateTechStack,
-    deleteTechStack
+    deleteTechStack,
 } from "../controllers/techStackController.js";
 
 router.post("/addTechStack", validateAccessToken, addTechStack);

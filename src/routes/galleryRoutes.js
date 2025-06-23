@@ -5,7 +5,7 @@ import { gallery } from "../utils/multer.js";
 import {
     addGallery,
     getAllGallery,
-    deleteGallery
+    deleteGallery,
 } from "../controllers/galleryController.js";
 
 router.post("/addGallery", validateAccessToken, gallery, addGallery);

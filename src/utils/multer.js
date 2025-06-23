@@ -15,7 +15,7 @@ const homeBannerStorage = diskStorage({
 });
 export const homeBanner = multer({
     storage: homeBannerStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).single('image');
 
 
@@ -32,7 +32,7 @@ const homeEnterpriseLogoStorage = diskStorage({
 });
 export const homeEnterpriseLogo = multer({
     storage: homeEnterpriseLogoStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).single('image');
 
 
@@ -49,7 +49,7 @@ const successStoryStorage = diskStorage({
 });
 export const successStoryImage = multer({
     storage: successStoryStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).single('image');
 
 
@@ -66,7 +66,7 @@ const blogStorage = diskStorage({
 });
 export const blogImage = multer({
     storage: blogStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).single('image');
 
 
@@ -83,7 +83,7 @@ const caseStudyStorage = diskStorage({
 });
 export const caseStudy = multer({
     storage: caseStudyStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).fields([
     { name: 'companyLogo', maxCount: 1 },
     { name: 'mainImage', maxCount: 1 },
@@ -104,7 +104,7 @@ const portfolioStorage = diskStorage({
 });
 export const portfolio = multer({
     storage: portfolioStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).fields([
     { name: 'image', maxCount: 1 },
     { name: 'banner', maxCount: 1 },
@@ -124,7 +124,7 @@ const testimonialsStorage = diskStorage({
 });
 export const testimonials = multer({
     storage: testimonialsStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).single('image');
 
 
@@ -159,7 +159,7 @@ const jobApplicationPDFStorage = diskStorage({
 });
 export const jobApplicationPDF = multer({
     storage: jobApplicationPDFStorage,
-    limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+    limits: { fileSize: 2 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['application/pdf'];
         if (allowedTypes.includes(file.mimetype)) cb(null, true);
@@ -215,5 +215,5 @@ const hireOurDeveloperStorage = diskStorage({
 });
 export const hireOurDeveloper = multer({
     storage: hireOurDeveloperStorage,
-    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    limits: { fileSize: 1 * 1024 * 1024 },
 }).single('logo');
