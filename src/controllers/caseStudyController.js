@@ -12,7 +12,7 @@ export const addCaseStudy = async (req, res) => {
     const companyLogo = req.files?.companyLogo?.[0]?.filename;
     const mainImage = req.files?.mainImage?.[0]?.filename;
     const typography = req.files?.typography?.[0]?.filename;
-    const color = req.files?.colors?.[0]?.filename;
+    const color = req.files?.color?.[0]?.filename;
     req.body.companyLogo = companyLogo;
     req.body.mainImage = mainImage;
     req.body.typography = typography;
@@ -149,8 +149,8 @@ export const getCaseStudyById = async (req, res) => {
             ...getCaseStudyById._doc,
             companyLogo: `/caseStudy/${getCaseStudyById.companyLogo}`,
             mainImage: `/caseStudy/${getCaseStudyById.mainImage}`,
-            typography: `/caseStudy/${data.typography}`,
-            color: `/caseStudy/${data.color}`,
+            typography: `/caseStudy/${getCaseStudyById.typography}`,
+            color: `/caseStudy/${getCaseStudyById.color}`,
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_SINGLE, resData);
     } catch (error) {
@@ -160,15 +160,15 @@ export const getCaseStudyById = async (req, res) => {
 };
 
 export const deleteCaseStudy = async (req, res) => {
-    const id = req.params;
+    const { id } = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     try {
-        caseStudyModel.findByIdAndUpdate(
+       await caseStudyModel.findByIdAndUpdate(
             { _id: id },
-            { $set: { isActive: false } },
+            { isActive: false },
             { new: false }
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_CASE_STUDY, {});

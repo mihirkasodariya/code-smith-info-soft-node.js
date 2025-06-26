@@ -2,9 +2,12 @@ import {
     hireDeveloperModel,
     hireDeveloperValidation,
     idValidation,
+    HireDeveloperInquiryModel,
+    HireDeveloperInquiryValidation,
 } from "../models/hireDeveloperModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
+import sendMail from '../../config/mailer/index.js';
 
 export const addHireOurDeveloper = async (req, res) => {
     const logo = req?.file?.filename;
@@ -103,7 +106,7 @@ export const updateHireOurDevelopers = async (req, res) => {
 };
 
 export const deleteHireOurDevelopers = async (req, res) => {
-    const { id } = req?.params;
+    const { id } = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
@@ -117,6 +120,95 @@ export const deleteHireOurDevelopers = async (req, res) => {
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_HIRE_OUR_DEVELOPER, {});
     } catch (error) {
         console.error('Error in deleteHireOurDevelopers:', error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const addHireDeveloperInquiry = async (req, res) => {
+    try {
+        const { name, email, hiringDuration, message, service } = req.body;
+
+        const { error } = HireDeveloperInquiryValidation.validate(req.body);
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
+        };
+        const inquiry = await HireDeveloperInquiryModel.create({
+            name,
+            email,
+            hiringDuration,
+            message,
+            service
+        });
+        const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        const fullName = `${capitalize(name)}`;
+        const subject = `Thanks for Reaching Out – We’ve Received Your${service} Request!`
+        sendMail("hire_developer_request", subject, email, {
+            fullName: fullName,
+            email: email,
+            hiringDuration: hiringDuration,
+            service: service,
+            message: message,
+            base_URL: process.env.BASE_URL,
+        });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);
+    } catch (error) {
+        console.error('Error in addBusinessInquiry:', error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getAllHireDeveloperInquiry = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const query = { isActive: true };
+        const sort = { createdAt: -1 };
+
+        const [inquiries, totalRecords] = await Promise.all([
+            HireDeveloperInquiryModel.find(query).sort(sort).skip(skip).limit(limit).lean(),
+            HireDeveloperInquiryModel.countDocuments(query),
+        ]);
+        const totalPages = Math.ceil(totalRecords / limit);
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.INQUIRY_LIST, {
+            page,
+            limit,
+            totalRecords,
+            totalPages,
+            records: inquiries,
+        });
+    } catch (error) {
+        console.error('Error in getAllHireDeveloperInquiry:', error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
+export const getHireDeveloperInquiry = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate({ id });
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
+        };
+        const inquiry = await HireDeveloperInquiryModel.findOne({ _id: id, isActive: true });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.INQUIRY_SINGLE, inquiry);
+    } catch (error) {
+        console.error('Error in getHireDeveloperInquiry:', error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+export const markHireDeveloperInquiry = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate(req.body);
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
+        };
+        await HireDeveloperInquiryModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_INQUIRY, {});
+    } catch (error) {
+        console.error('Error in markHireDeveloperInquiry:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

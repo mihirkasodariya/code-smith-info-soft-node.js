@@ -94,11 +94,11 @@ export const jobValidation = Joi.object({
         "string.max": "Name must be at most 50 characters",
         "any.required": "Name is required"
     }),
-    email: Joi.string().email().required().messages({
-        "string.email": "Email must be a valid email address",
-        "string.empty": "Email is required",
-        "any.required": "Email is required"
-    }),
+    email: Joi.string().email().trim().lowercase().required().messages({
+          "string.empty": "Email is required",
+          "string.email": "Please provide a valid email address",
+          "any.required": "Email is required",
+      }),
     mobile: Joi.string().required().messages({
         "string.empty": "Phone number is required",
         "any.required": "Phone number is required"

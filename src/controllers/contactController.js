@@ -76,7 +76,7 @@ export const getAllInquiries = async (req, res) => {
 export const getInquiry = async (req, res) => {
     try {
         const { id } = req.params;
-        const { error } = idValidation.validate(req.body);
+        const { error } = idValidation.validate({ id });
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
@@ -91,7 +91,7 @@ export const getInquiry = async (req, res) => {
 export const markInquiry = async (req, res) => {
     try {
         const { id } = req.params;
-        const { error } = idValidation.validate(req.body);
+        const { error } = idValidation.validate({ id });
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
@@ -133,7 +133,7 @@ export const addJobApplication = async (req, res) => {
 export const getJobApplication = async (req, res) => {
     try {
         const { id } = req.params;
-        const { error } = idValidation.validate(req.body);
+        const { error } = idValidation.validate({ id });
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
@@ -175,7 +175,7 @@ export const getAllJobApplication = async (req, res) => {
 export const markJobApplication = async (req, res) => {
     try {
         const { id } = req.params;
-        const { error } = idValidation.validate(req.body);
+        const { error } = idValidation.validate({ id });
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
@@ -211,7 +211,7 @@ export const addGetInTouch = async (req, res) => {
 export const getGetInTouch = async (req, res) => {
     try {
         const { id } = req.params;
-        const { error } = idValidation.validate(req.body);
+        const { error } = idValidation.validate({ id });
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
@@ -253,13 +253,14 @@ export const getAllGetInTouch = async (req, res) => {
 export const markGetInTouch = async (req, res) => {
     try {
         const { id } = req.params;
-        const { error } = idValidation.validate(req.body);
+        const { error } = idValidation.validate({ id });
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
         };
         await getInTouchModel.findByIdAndUpdate(id, { isMark: true }, { new: true });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.MARK_GET_IN_TOUCH, {});
     } catch (error) {
+        console.error('Error in markGetInTouch:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
@@ -282,7 +283,7 @@ export const addSubscribe = async (req, res) => {
         await subscribeUserModel.create({ email });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_SUCCESS, {});
     } catch (err) {
-        console.error(err);
+        console.error('Error in addSubscribe:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };

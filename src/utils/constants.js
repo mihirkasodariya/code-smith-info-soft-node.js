@@ -116,4 +116,5 @@ export const dbTableName = {
     GET_IN_TOUCH: 'get_in_touchs',
     SUBSCRIBE: "subscribers",
     HIRE_DEVELOPER: "hire_developers",
+    HIRE_DEVELOPER_INQUIRY: "hire_developer_inquirys",
 };

@@ -40,3 +40,45 @@ export const idValidation = Joi.object({
         "any.required": "ID is required",
     }),
 });
+
+
+const HireDeveloperInquirySchema = new Schema(
+    {
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        hiringDuration: { type: String, required: true },
+        message: { type: String, required: true },
+        service: { type: String, required: true },
+        isMark: { type: Boolean, default: false },
+        isActive: { type: Boolean, default: true },
+    },
+    { timestamps: true },
+);
+export const HireDeveloperInquiryModel = model(dbTableName.HIRE_DEVELOPER_INQUIRY, HireDeveloperInquirySchema);
+
+export const HireDeveloperInquiryValidation = Joi.object({
+    name: Joi.string().trim().required().messages({
+        'string.base': 'Name must be a valid string.',
+        'string.empty': 'Name is required.',
+        'any.required': 'Name is required.',
+    }),
+    email: Joi.string().email().required().messages({
+        'string.base': 'Email must be a valid string.',
+        'string.email': 'Email must be a valid email address.',
+        'string.empty': 'Email is required.',
+        'any.required': 'Email is required.',
+    }),
+    hiringDuration: Joi.string().required().messages({
+        'string.base': 'Hiring duration must be a valid string.',
+        'string.empty': 'Hiring duration is required.',
+        'any.required': 'Hiring duration is required.',
+    }),
+    message: Joi.string().required().messages({
+        'string.base': 'Message must be a valid string.',
+    }),
+    service: Joi.string().required().messages({
+        'string.base': 'Service must be a valid string.',
+        'string.empty': 'Service is required.',
+        'any.required': 'Service is required.',
+    }),
+});

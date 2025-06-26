@@ -13,7 +13,7 @@ import {
 router.post("/addCaseStudy", caseStudy, validateAccessToken, addCaseStudy);
 router.get("/getAllCaseStudy", getAllCaseStudy);
 router.get("/getCaseStudyById/:id", getCaseStudyById);
-router.put("/updateCaseStudy/:id", validateAccessToken, updateCaseStudy);
+router.put("/updateCaseStudy/:id", caseStudy, validateAccessToken, updateCaseStudy);
 router.delete("/deleteCaseStudy/:id", validateAccessToken, deleteCaseStudy);
 
 export default router;

@@ -90,24 +90,6 @@ export const getAllCareer = async (req, res) => {
     };
 };
 
-export const adminGetAllCareer = async (req, res) => {
-    try {
-        const careers = await careerModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
-
-        const data = careers.map(({ techStackId, ...rest }) => ({
-            ...rest._doc,
-            techStackId: techStackId?._id || null,
-            techStackName: techStackId?.name || null,
-            textColor: techStackId?.textColor || null,
-            bgColor: techStackId?.bgColor || null
-        }));
-        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CAREER_LIST, data);
-    } catch (error) {
-        console.error('Error in adminGetAllCareer:', error);
-        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
-    };
-};
-
 export const updateCareer = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
