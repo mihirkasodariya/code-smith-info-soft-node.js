@@ -7,7 +7,8 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addSuccessStoryImage(req, res) {
+
+export const addSuccessStoryImage = async (req, res) => {
     const image = req?.file?.filename
     const type = req?.query?.type;
     const { error } = successStoryValidation.validate({ image, type });
@@ -26,7 +27,7 @@ export async function addSuccessStoryImage(req, res) {
     };
 };
 
-export async function getAllSuccessStoryImage(req, res) {
+export const getAllSuccessStoryImage = async (req, res) => {
     const { type } = req?.query;
     const { error } = typeValidation.validate({ type });
     if (error) {
@@ -45,7 +46,7 @@ export async function getAllSuccessStoryImage(req, res) {
     };
 };
 
-export async function deleteSuccessStoryImage(req, res) {
+export const deleteSuccessStoryImage = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id });
     if (error) {

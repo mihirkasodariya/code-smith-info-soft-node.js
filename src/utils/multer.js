@@ -87,7 +87,9 @@ export const caseStudy = multer({
 }).fields([
     { name: 'companyLogo', maxCount: 1 },
     { name: 'mainImage', maxCount: 1 },
-    { name: 'images', maxCount: 10 },
+    { name: 'color', maxCount: 1 },
+    { name: 'typography', maxCount: 1 },
+    // { name: 'images', maxCount: 10 },
 ]);
 
 

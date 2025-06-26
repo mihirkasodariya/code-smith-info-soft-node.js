@@ -8,12 +8,16 @@ import { resStatusCode, resMessage } from "../utils/constants.js";
 import { subscribeUserModel } from "../models/contactModel.js"
 import sendMail from '../../config/mailer/index.js';
 
-export async function addCaseStudy(req, res) {
-    const companyLogo = req.files?.companyLogo?.[0]?.filename || '';
-    const mainImage = req.files?.mainImage?.[0]?.filename || '';
+export const addCaseStudy = async (req, res) => {
+    const companyLogo = req.files?.companyLogo?.[0]?.filename;
+    const mainImage = req.files?.mainImage?.[0]?.filename;
+    const typography = req.files?.typography?.[0]?.filename;
+    const color = req.files?.colors?.[0]?.filename;
     req.body.companyLogo = companyLogo;
     req.body.mainImage = mainImage;
-    const { projectName, description, platform, duration, industry, problem, solution, tech, devProcess, challenges, color, typography, conclusion } = req.body;
+    req.body.typography = typography;
+    req.body.color = color;
+    const { projectName, description, platform, duration, industry, problem, solution, tech, devProcess, challenges, conclusion } = req.body;
 
     const { error } = caseStudyValidation.validate(req.body);
     if (error) {
@@ -31,8 +35,8 @@ export async function addCaseStudy(req, res) {
             tech,
             devProcess,
             challenges,
-            color,
             typography,
+            color,
             conclusion,
             companyLogo,
             mainImage,
@@ -42,8 +46,7 @@ export async function addCaseStudy(req, res) {
         const shortDescription = description.split(" ").slice(0, 200).join(" ");
         await subscribeList.reduce(async (prevPromise, subscriber) => {
             await prevPromise;
-
-            await sendMail("case_study", "📊 New Case Study Released by CodeSmith InfoSoft - See What We Built!", subscriber.email, {
+            await sendMail("case_study", "📊 New Case Study Released by CodeSmith InfoSoft LLP - See What We Built!", subscriber.email, {
                 title: projectName,
                 mainImage: '/caseStudy/' + mainImage,
                 description: shortDescription,
@@ -58,22 +61,7 @@ export async function addCaseStudy(req, res) {
     };
 };
 
-// export async function getAllCaseStudy(req, res) {
-//     try {
-//         const caseStudyList = await caseStudyModel.find({ isActive: true }).sort({ createdAt: -1 });
-//         const chnageImageResponse = caseStudyList.map((data) => ({
-//             ...data._doc,
-//             companyLogo: `/caseStudy/${data.companyLogo}`,
-//             mainImage: `/caseStudy/${data.mainImage}`,
-//         }));
-//         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, chnageImageResponse);
-//     } catch (error) {
-//         console.error('Error in getAllCaseStudy:', error);
-//         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
-//     };
-// };
-
-export async function getAllCaseStudy(req, res) {
+export const getAllCaseStudy = async (req, res) => {
     try {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
@@ -98,6 +86,8 @@ export async function getAllCaseStudy(req, res) {
                 ...data._doc,
                 companyLogo: `/caseStudy/${data.companyLogo}`,
                 mainImage: `/caseStudy/${data.mainImage}`,
+                typography: `/caseStudy/${data.typography}`,
+                color: `/caseStudy/${data.color}`,
             }));
             return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, {
                 page: pageNum,
@@ -113,6 +103,8 @@ export async function getAllCaseStudy(req, res) {
             ...data._doc,
             companyLogo: `/caseStudy/${data.companyLogo}`,
             mainImage: `/caseStudy/${data.mainImage}`,
+            typography: `/caseStudy/${data.typography}`,
+            color: `/caseStudy/${data.color}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_LIST, formattedData);
     } catch (error) {
@@ -121,7 +113,7 @@ export async function getAllCaseStudy(req, res) {
     };
 };
 
-export async function updateCaseStudy(req, res) {
+export const updateCaseStudy = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
     const { error } = idValidation.validate({ id });
@@ -130,6 +122,8 @@ export async function updateCaseStudy(req, res) {
     };
     req.files?.companyLogo?.[0]?.filename && (updateData.companyLogo = req.files.companyLogo[0].filename);
     req.files?.mainImage?.[0]?.filename && (updateData.mainImage = req.files.mainImage[0].filename);
+    req.files?.typography?.[0]?.filename && (updateData.typography = req.files.typography[0].filename);
+    req.files?.color?.[0]?.filename && (updateData.color = req.files.color[0].filename);
     try {
         await caseStudyModel.findByIdAndUpdate(
             { _id: id },
@@ -155,6 +149,8 @@ export const getCaseStudyById = async (req, res) => {
             ...getCaseStudyById._doc,
             companyLogo: `/caseStudy/${getCaseStudyById.companyLogo}`,
             mainImage: `/caseStudy/${getCaseStudyById.mainImage}`,
+            typography: `/caseStudy/${data.typography}`,
+            color: `/caseStudy/${data.color}`,
         };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.CASE_STUDY_SINGLE, resData);
     } catch (error) {
@@ -163,7 +159,7 @@ export const getCaseStudyById = async (req, res) => {
     };
 };
 
-export async function deleteCaseStudy(req, res) {
+export const deleteCaseStudy = async (req, res) => {
     const id = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {

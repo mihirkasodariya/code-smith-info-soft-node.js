@@ -6,7 +6,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addTestimonials(req, res) {
+export const addTestimonials = async (req, res) => {
     const image = req.file?.filename || '';
     req.body.image = image;
     const { name, description, rating, bgColor, textColor } = req.body;
@@ -30,7 +30,7 @@ export async function addTestimonials(req, res) {
     };
 };
 
-export async function getAllTestimonials(req, res) {
+export const getAllTestimonials = async (req, res) => {
     try {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
@@ -72,7 +72,7 @@ export async function getAllTestimonials(req, res) {
     };
 };
 
-export async function updateTestimonials(req, res) {
+export const updateTestimonials = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
     const { error } = idValidation.validate({ id });
@@ -93,7 +93,7 @@ export async function updateTestimonials(req, res) {
     };
 };
 
-export async function deleteTestimonials(req, res) {
+export const deleteTestimonials = async (req, res) => {
     const { id } = req.params;
     const { error } = idValidation.validate(id);
     if (error) {

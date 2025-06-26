@@ -6,7 +6,7 @@ import {
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import response from "../utils/response.js";
 
-export async function addCareer(req, res) {
+export const addCareer = async (req, res) => {
     const { techStackId, jobTitle, qualification, location, experience, vacancy, ofcTime, role, skills, benefits } = req.body;
     const { error } = careerValidation.validate(req.body);
     if (error) {
@@ -32,7 +32,7 @@ export async function addCareer(req, res) {
     };
 };
 
-export async function getAllCareer(req, res) {
+export const getAllCareer = async (req, res) => {
     try {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
@@ -42,7 +42,7 @@ export async function getAllCareer(req, res) {
         let careerData = [];
         let totalRecords = 0;
         let totalPages = 0;
-        
+
         if (isPaginated) {
             const pageNum = parseInt(page);
             const limitNum = parseInt(limit);
@@ -90,7 +90,7 @@ export async function getAllCareer(req, res) {
     };
 };
 
-export async function adminGetAllCareer(req, res) {
+export const adminGetAllCareer = async (req, res) => {
     try {
         const careers = await careerModel.find({ isActive: true }).populate('techStackId').sort({ createdAt: -1 });
 
@@ -108,7 +108,7 @@ export async function adminGetAllCareer(req, res) {
     };
 };
 
-export async function updateCareer(req, res) {
+export const updateCareer = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
     const { error } = idValidation.validate({ id });
@@ -128,7 +128,7 @@ export async function updateCareer(req, res) {
     };
 };
 
-export async function archiveCareer(req, res) {
+export const archiveCareer = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id: id });
     if (error) {
@@ -147,7 +147,7 @@ export async function archiveCareer(req, res) {
     };
 };
 
-export async function deleteCareer(req, res) {
+export const deleteCareer = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id: id });
     if (error) {

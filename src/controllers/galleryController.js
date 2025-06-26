@@ -41,7 +41,7 @@ export const getAllGallery = async (req, res) => {
     };
 };
 
-export async function deleteGallery(req, res) {
+export const deleteGallery = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id: id });
     if (error) {

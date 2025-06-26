@@ -23,5 +23,5 @@ app.use(express.static(join(__dirname, "public")));
 app.use("/api", router.default);
 
 app.listen(port, () => {
-  console.log("→ Port: Server is running on port", port);
+  console.debug(`\x1b[32m✔ Server Started Successfully\x1b[0m \x1b[36m→ Now listening on Port: ${port}\x1b[0m`);
 });

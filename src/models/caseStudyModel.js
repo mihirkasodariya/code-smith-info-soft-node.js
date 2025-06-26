@@ -20,23 +20,18 @@ const caseStudySchema = new Schema(
                 p: { type: String },
             },
         ],
-        tech: [
-            {
-                _id: false,
-                techImage: { type: String },
-                techName: { type: String },
-            },
-        ],
+        tech: { type: [String], required: true },
         devProcess: { type: [String], required: true },
         challenges: { type: [String], required: true },
-        color: { type: [String], required: true },
-        typography: [
-            {
-                _id: false,
-                name: { type: String },
-                cdn: { type: String },
-            },
-        ],
+        color: { type: String, required: true },
+        typography: { type: String, required: true },
+        // typography: [
+        //     {
+        //         _id: false,
+        //         name: { type: String },
+        //         cdn: { type: String },
+        //     },
+        // ],
         conclusion: { type: [String], required: true },
         isActive: { type: Boolean, default: true },
     },
@@ -87,15 +82,10 @@ export const caseStudyValidation = Joi.object({
     })).messages({
         'array.base': 'Solution must be an array of objects.',
     }),
-    tech: Joi.array().items(Joi.object({
-        techImage: Joi.string().uri().allow('', null).messages({
-            'string.uri': 'Tech image must be a valid URL.',
-        }),
-        techName: Joi.string().allow('', null).messages({
-            'string.base': 'Tech name must be a string.',
-        }),
-    })).messages({
-        'array.base': 'Tech must be an array of objects.',
+    tech: Joi.array().items(Joi.string()).min(1).required().messages({
+        'array.base': 'Tech name must be an array.',
+        'array.min': 'At least one Tech name is required.',
+        'any.required': 'Tech name is required.',
     }),
     devProcess: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Development process must be an array.',
@@ -107,26 +97,34 @@ export const caseStudyValidation = Joi.object({
         'array.min': 'At least one challenge is required.',
         'any.required': 'Challenges are required.',
     }),
-    color: Joi.array().items(Joi.string().messages({
-        'string.pattern.base': 'Color must be a valid hex code.',
-    })).min(3).required().messages({
-        'array.base': 'Color must be an array.',
-        'array.min': 'At least one color is required.',
-        'any.required': 'Color is required.',
+    color: Joi.string().required().messages({
+        'string.empty': 'Color image is required.',
+        'any.required': 'Color image is required.',
     }),
-    typography: Joi.array().items(Joi.object({
-        name: Joi.string().required().messages({
-            'string.empty': 'Typography name is required.',
-            'any.required': 'Typography name is required.',
-        }),
-        cdn: Joi.string().uri().required().messages({
-            'string.empty': 'Typography CDN is required.',
-            'string.uri': 'CDN must be a valid URL.',
-            'any.required': 'Typography CDN is required.',
-        }),
-    })).messages({
-        'array.base': 'Typography must be an array of objects.',
+    typography: Joi.string().required().messages({
+        'string.empty': 'Typography image is required.',
+        'any.required': 'Typography image is required.',
     }),
+    // color: Joi.array().items(Joi.string().messages({
+    //     'string.pattern.base': 'Color must be a valid hex code.',
+    // })).min(3).required().messages({
+    //     'array.base': 'Color must be an array.',
+    //     'array.min': 'At least one color is required.',
+    //     'any.required': 'Color is required.',
+    // }),
+    // typography: Joi.array().items(Joi.object({
+    //     name: Joi.string().required().messages({
+    //         'string.empty': 'Typography name is required.',
+    //         'any.required': 'Typography name is required.',
+    //     }),
+    //     cdn: Joi.string().uri().required().messages({
+    //         'string.empty': 'Typography CDN is required.',
+    //         'string.uri': 'CDN must be a valid URL.',
+    //         'any.required': 'Typography CDN is required.',
+    //     }),
+    // })).messages({
+    //     'array.base': 'Typography must be an array of objects.',
+    // }),
     conclusion: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Conclusion must be an array.',
         'array.min': 'At least one conclusion point is required.',

@@ -6,7 +6,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addPortfolio(req, res) {
+export const addPortfolio = async (req, res) => {
     const banner = req.files?.banner[0]?.filename || '';
     const image = req.files?.image?.[0]?.filename || '';
     req.body.banner = banner;
@@ -33,7 +33,7 @@ export async function addPortfolio(req, res) {
     };
 };
 
-export async function getAllPortfolio(req, res) {
+export const getAllPortfolio = async (req, res) => {
     try {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
@@ -93,7 +93,7 @@ export async function getAllPortfolio(req, res) {
     };
 };
 
-export async function updatePortfolio(req, res) {
+export const updatePortfolio = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
     const { error } = idValidation.validate({ id });
@@ -115,7 +115,7 @@ export async function updatePortfolio(req, res) {
     };
 };
 
-export async function deletePortfolio(req, res) {
+export const deletePortfolio = async (req, res) => {
     const { id } = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {

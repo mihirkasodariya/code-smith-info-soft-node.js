@@ -32,10 +32,10 @@ const sendMail = async (template, subject, email, emailData, from = process.env.
     } else {
       result = mailer(email, from, subject, renderedTemplate, 'simple');
     };
-    console.log(`Email sent successfully to ${email} with subject "${subject}"`);
+    console.debug(`Email Sent Successfully to ${email} with Subject "${subject}"`);
     return result;
   } catch (error) {
-    console.error(`Error sending email to ${email} with subject "${subject}":`, error);
+    console.error(`Error Sending Email to ${email} with Subject "${subject}":`, error);
     return error;
   };
 };

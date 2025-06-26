@@ -6,7 +6,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addHireOurDeveloper(req, res) {
+export const addHireOurDeveloper = async (req, res) => {
     const logo = req?.file?.filename;
     const { title, url } = req.body;
     const { error } = hireDeveloperValidation.validate({ logo, title, url });
@@ -39,7 +39,7 @@ export const getHireOurDeveloper = async (req, res) => {
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
-export async function getAllHireOurDevelopers(req, res) {
+export const getAllHireOurDevelopers = async (req, res) => {
     try {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
@@ -81,7 +81,7 @@ export async function getAllHireOurDevelopers(req, res) {
     };
 };
 
-export async function updateHireOurDevelopers(req, res) {
+export const updateHireOurDevelopers = async (req, res) => {
     const { id } = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {
@@ -102,7 +102,7 @@ export async function updateHireOurDevelopers(req, res) {
     };
 };
 
-export async function deleteHireOurDevelopers(req, res) {
+export const deleteHireOurDevelopers = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id });
     if (error) {

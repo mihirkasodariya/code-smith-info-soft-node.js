@@ -6,7 +6,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addEnterpriseLogo(req, res) {
+export const addEnterpriseLogo = async (req, res) => {
     const image = req?.file?.filename
     const { error } = enterpriseLogoValidation.validate({ image });
     if (error) {
@@ -23,7 +23,7 @@ export async function addEnterpriseLogo(req, res) {
     };
 };
 
-export async function getAllEnterpriseLogo(req, res) {
+export const getAllEnterpriseLogo = async (req, res) => {
     try {
         const getAllLogo = await homeEnterpriseModel.find({ isActive: true }).sort({ createdAt: -1 });
         const chnageLogoResponse = getAllLogo.map((logo) => ({
@@ -37,7 +37,7 @@ export async function getAllEnterpriseLogo(req, res) {
     };
 };
 
-export async function deleteEnterpriseLogo(req, res) {
+export const deleteEnterpriseLogo = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id });
     if (error) {

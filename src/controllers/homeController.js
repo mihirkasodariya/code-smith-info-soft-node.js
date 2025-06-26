@@ -6,7 +6,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addHomeBanner(req, res) {
+export const addHomeBanner = async (req, res) => {
     const image = req?.file?.filename
     const { error } = homeBannerValidation.validate({ image });
     if (error) {
@@ -23,7 +23,7 @@ export async function addHomeBanner(req, res) {
     };
 };
 
-export async function getAllHomeBanner(req, res) {
+export const getAllHomeBanner = async (req, res) => {
     try {
         const homeBannerList = await homeBannerModel.find({ isActive: true }).sort({ createdAt: -1 });
         const chnageImageResponse = homeBannerList.map((banner) => ({
@@ -37,7 +37,7 @@ export async function getAllHomeBanner(req, res) {
     };
 };
 
-export async function deleteHomeBanner(req, res) {
+export const deleteHomeBanner = async (req, res) => {
     const { id } = req.params;
     const { error } = idHomeValidation.validate({ id });
     if (error) {

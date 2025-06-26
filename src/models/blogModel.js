@@ -9,13 +9,8 @@ const blogSchema = new Schema(
         image: { type: String, required: true },
         title: { type: String, required: true },
         description: { type: String },
-        details: [
-            {
-                _id: false,
-                p: { type: String },
-                h: { type: String },
-            },
-        ],
+        details: { type: String },
+        createdBy: { type: String },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true },
@@ -43,17 +38,27 @@ export const blogValidation = Joi.object({
     description: Joi.string().optional().messages({
         "string.base": "Description must be a string.",
     }),
-    details: Joi.array().items(Joi.object({
-        p: Joi.string().optional().messages({
-            "string.base": "Paragraph (p) must be a string.",
-        }),
-        h: Joi.string().optional().messages({
-            "string.base": "Heading (h) must be a string.",
-        }),
-    })).required().messages({
-        "array.base": "Details must be an array of objects.",
-        "any.required": "Details are required.",
+    details: Joi.string().required().messages({
+        "string.base": "Details must be a string.",
+        "string.empty": "Details is required.",
+        "any.required": "Details is required.",
     }),
+    createdBy: Joi.string().required().messages({
+        "string.base": "CreatedBy must be a string.",
+        "string.empty": "CreatedBy is required.",
+        "any.required": "CreatedBy is required.",
+    }),
+    // details: Joi.array().items(Joi.object({
+    //     p: Joi.string().optional().messages({
+    //         "string.base": "Paragraph (p) must be a string.",
+    //     }),
+    //     h: Joi.string().optional().messages({
+    //         "string.base": "Heading (h) must be a string.",
+    //     }),
+    // })).required().messages({
+    //     "array.base": "Details must be an array of objects.",
+    //     "any.required": "Details are required.",
+    // }),
 });
 
 export const idValidation = Joi.object({

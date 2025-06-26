@@ -32,14 +32,13 @@ export const addBusinessInquiry = async (req, res) => {
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
         const fullName = `${capitalize(fname)} ${capitalize(lname)}`;
-        sendMail("business_inquiry", "Thanks for reaching out to CodeSmith InfoSoft — we appreciate your interest!", email, {
+        sendMail("business_inquiry", "Thanks for reaching out to CodeSmith InfoSoft LLP — we appreciate your interest!", email, {
             fullName: fullName,
             email: email,
             mobile: mobile,
             message: message,
             base_URL: process.env.BASE_URL,
-        },
-        );
+        });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);
     } catch (error) {
         console.error('Error in addBusinessInquiry:', error);

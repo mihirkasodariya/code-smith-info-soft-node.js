@@ -8,7 +8,7 @@ import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import { blogModel } from "../models/blogModel.js";
 
-export async function addTechStack(req, res) {
+export const addTechStack = async (req, res) => {
     const { name, bgColor, textColor } = req.body;
     const { error } = techStackValidation.validate(req.body);
     if (error) {
@@ -31,7 +31,7 @@ export async function addTechStack(req, res) {
     };
 };
 
-export async function getAllTechStack(req, res) {
+export const getAllTechStack = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -56,17 +56,18 @@ export async function getAllTechStack(req, res) {
     };
 };
 
-export async function updateTechStack(req, res) {
+export const updateTechStack = async (req, res) => {
     const { id } = req?.params;
-    const { name } = req.body;
-    const { error } = updateTechStackValidation.validate({ id, name });
+    req.body.id = id;
+    const { error } = updateTechStackValidation.validate(req.body);
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
+    const updateData = req.body;
     try {
         await techStackModel.findByIdAndUpdate(
             id,
-            { name },
+            { $set: updateData },
             { new: false }
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_TECH_STACK, {});
@@ -76,7 +77,7 @@ export async function updateTechStack(req, res) {
     };
 };
 
-export async function deleteTechStack(req, res) {
+export const deleteTechStack = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id: id });
     if (error) {

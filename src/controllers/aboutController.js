@@ -6,7 +6,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-export async function addAboutUS(req, res) {
+export const addAboutUS = async (req, res) => {
     try {
         const { type } = req.body;
         const files = req.files?.mediaFile || [];
@@ -32,7 +32,7 @@ export async function addAboutUS(req, res) {
     };
 };
 
-export async function getAllAboutUS(req, res) {
+export const getAllAboutUS = async (req, res) => {
     const { type } = req.params;
     try {
         const aboutUSList = await aboutUSModel.find({ isActive: true, type }).sort({ createdAt: -1 });
@@ -47,7 +47,7 @@ export async function getAllAboutUS(req, res) {
     };
 };
 
-export async function deleteAboutUS(req, res) {
+export const deleteAboutUS = async (req, res) => {
     const { id } = req.params;
     const { error } = idValidation.validate({ id });
     if (error) {

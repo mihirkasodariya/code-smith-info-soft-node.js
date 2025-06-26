@@ -8,8 +8,8 @@ const teamSchema = new Schema({
     position: { type: String, required: true },
     linkedin: { type: String },
     instagram: { type: String },
-    dribbble: { type: String },
-    behance: { type: String },
+    twitter: { type: String },
+    facebook: { type: String },
     photo: { type: String, require: true },
     textColor: { type: String },
     bgColor: { type: String },
@@ -40,11 +40,11 @@ export const teamValidation = Joi.object({
     instagram: Joi.string().uri().optional().allow("").messages({
         "string.uri": "Instagram must be a valid URL"
     }),
-    dribbble: Joi.string().uri().optional().allow("").messages({
-        "string.uri": "Dribbble must be a valid URL"
+    twitter: Joi.string().uri().optional().allow("").messages({
+        "string.uri": "Twitter must be a valid URL"
     }),
-    behance: Joi.string().uri().optional().allow("").messages({
-        "string.uri": "Behance must be a valid URL"
+    facebook: Joi.string().uri().optional().allow("").messages({
+        "string.uri": "Facebook must be a valid URL"
     }),
     photo: Joi.string().required().messages({
         "string.uri": "Photo must be a valid URL"

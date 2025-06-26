@@ -8,10 +8,10 @@ import { resStatusCode, resMessage } from "../utils/constants.js";
 import { subscribeUserModel } from "../models/contactModel.js"
 import sendMail from '../../config/mailer/index.js';
 
-export async function addBlog(req, res) {
+export const addBlog = async (req, res) => {
     const image = req?.file?.filename;
-    const { techStackId, title, description, details } = req.body;
-    const { error } = blogValidation.validate({ techStackId, image, title, description, details });
+    const { createdBy, techStackId, title, description, details } = req.body;
+    const { error } = blogValidation.validate({ createdBy, techStackId, image, title, description, details });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
@@ -22,13 +22,14 @@ export async function addBlog(req, res) {
             title,
             details,
             description,
+            createdBy,
         });
         const subscribeList = await subscribeUserModel.find({ isActive: true })
 
         const shortDescription = description.split(" ").slice(0, 200).join(" ");
         await subscribeList.reduce(async (prevPromise, subscriber) => {
             await prevPromise;
-            await sendMail("blog", "📊 New Blog Released by CodeSmith InfoSoft - See What We Built!", subscriber.email, {
+            await sendMail("blog", "📊 New Blog Released by CodeSmith InfoSoft LLP- See What We Built!", subscriber.email, {
                 title: title,
                 mainImage: '/blog/' + image,
                 description: shortDescription,
@@ -43,7 +44,7 @@ export async function addBlog(req, res) {
     };
 };
 
-export async function getAllBlog(req, res) {
+export const getAllBlog = async (req, res) => {
     try {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
@@ -123,9 +124,9 @@ export const getBlogById = async (req, res) => {
     };
 };
 
-export async function updateBlog(req, res) {
+export const updateBlog = async (req, res) => {
     const { id } = req.params;
-    const { error } = blogValidation.validate({ id });
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
@@ -135,7 +136,7 @@ export async function updateBlog(req, res) {
         await blogModel.findByIdAndUpdate(
             { _id: id },
             { $set: updateData },
-            { new: false }
+            { new: false, runValidators: true }
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.UPDATE_BLOG, {});
     } catch (error) {
@@ -144,7 +145,7 @@ export async function updateBlog(req, res) {
     };
 };
 
-export async function deleteBlog(req, res) {
+export const deleteBlog = async (req, res) => {
     const { id } = req?.params;
     const { error } = idValidation.validate({ id });
     if (error) {

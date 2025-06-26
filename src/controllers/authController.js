@@ -8,7 +8,7 @@ import { resStatusCode, resMessage } from "../utils/constants.js";
 import { generateJWToken } from "../middleware/auth.js";
 import { hash, compare } from "bcrypt";
 
-export async function register(req, res) {
+export const register = async (req, res) => {
     const { fullName, email, password } = req.body;
     const { error } = authRegisterValidation.validate(req.body);
     if (error) {
@@ -32,7 +32,7 @@ export async function register(req, res) {
     };
 };
 
-export async function login(req, res) {
+export const login = async (req, res) => {
     const { email, password } = req.body;
     const { error } = authLoginValidation.validate(req.body);
     if (error) {

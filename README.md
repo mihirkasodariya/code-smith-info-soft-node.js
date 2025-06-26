@@ -1,4 +1,4 @@
-# 🚀 CodeSmith InfoSoft – IT Company Website Backend
+# 🚀 CodeSmith InfoSoft LLP – IT Company Website Backend
 
 A dynamic and scalable backend built with **Node.js**, **Express.js**, and **MongoDB**, designed to power the official website of **CodeSmith InfoSoft**. This API-driven architecture supports multiple modules such as blogs, careers, portfolios, authentication, and email integration using Nodemailer.
 

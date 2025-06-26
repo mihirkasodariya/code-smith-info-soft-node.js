@@ -3,9 +3,8 @@ import jwt from "jsonwebtoken";
 import { authModel } from "../models/authModel.js";
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
-import rateLimit from 'express-rate-limit';
 
-export const generateJWToken = async (payload) => {
+export async function generateJWToken(payload) {
     try {
         const secret = process.env.JWT_SECRET;
         const signOptions = {
@@ -21,7 +20,7 @@ export const generateJWToken = async (payload) => {
     };
 };
 
-export const validateAccessToken = async (req, res, next) => {
+export async function validateAccessToken(req, res, next) {
     try {
         const token = req.headers.authorization || req.headers.Authorization;
 
@@ -38,13 +37,13 @@ export const validateAccessToken = async (req, res, next) => {
             return response.error(res, resStatusCode.UNAUTHORISED, resMessage.UNAUTHORISED, {});
         };
         req.user = authenticatedUser;
-        console.log("ADMIN ID: ", req.user.id);
+        console.debug("\x1b[32m[AccessToken] Token Verified Successfully. Admin ID:\x1b[36m", req.user.id, "\x1b[0m");
         next();
     } catch (error) {
         console.error("JWT Verification Error:", error.message);
-        if (error.name === "TokenExpiredError") {
+        if (error?.name === "TokenExpiredError") {
             return response.error(res, resStatusCode.UNAUTHORISED, resMessage.TOKEN_EXPIRED, {});
-        } else if (error.name === "JsonWebTokenError") {
+        } else if (error?.name === "JsonWebTokenError") {
             return response.error(res, resStatusCode.UNAUTHORISED, resMessage.TOKEN_INVALID, {});
         } else {
             return response.error(res, resStatusCode.UNAUTHORISED, resMessage.TOKEN_INVALID, {});
@@ -52,7 +51,7 @@ export const validateAccessToken = async (req, res, next) => {
     };
 };
 
-export const validateAboutUSFiles = (req, res, next) => {
+export async function validateAboutUSFiles(req, res, next) {
     const files = req.files?.mediaFile || [];
     try {
         const invalidFile = files.find((file) => {
