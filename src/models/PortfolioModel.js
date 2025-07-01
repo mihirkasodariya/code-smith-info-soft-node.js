@@ -11,6 +11,7 @@ const portfolioSchema = new Schema(
         banner: { type: String, required: true },
         image: { type: String, required: true },
         features: { type: [String], required: true },
+        isMobile: { type: Boolean, default: false },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true },
@@ -47,6 +48,7 @@ export const portfolioValidation = Joi.object({
         'array.min': 'At least one feature is required.',
         'any.required': 'Features are required.',
     }),
+    isMobile: Joi.boolean().optional(),
 });
 
 export const idValidation = Joi.object({

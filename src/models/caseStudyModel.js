@@ -33,6 +33,7 @@ const caseStudySchema = new Schema(
         //     },
         // ],
         conclusion: { type: [String], required: true },
+        isMobile: { type: Boolean, default: false },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true },
@@ -105,6 +106,7 @@ export const caseStudyValidation = Joi.object({
         'string.empty': 'Typography image is required.',
         'any.required': 'Typography image is required.',
     }),
+    isMobile: Joi.boolean().optional(),
     // color: Joi.array().items(Joi.string().messages({
     //     'string.pattern.base': 'Color must be a valid hex code.',
     // })).min(3).required().messages({

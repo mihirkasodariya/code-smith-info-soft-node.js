@@ -9,8 +9,6 @@ const testimonialsSchema = new Schema(
         description: { type: String, required: true },
         rating: { type: String, required: true },
         image: { type: String, required: true },
-        bgColor: { type: String, required: true },
-        textColor: { type: String, required: true },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true },
@@ -37,16 +35,6 @@ export const testimonialsValidate = Joi.object({
         "any.required": "Image is required.",
         "string.base": "Image must be a string.",
         "string.empty": "Image cannot be empty."
-    }),
-    bgColor: Joi.string().required().messages({
-        "any.required": "Background color is required.",
-        "string.base": "Background color must be a string.",
-        "string.empty": "Background color cannot be empty."
-    }),
-    textColor: Joi.string().required().messages({
-        "any.required": "Text color is required.",
-        "string.base": "Text color must be a string.",
-        "string.empty": "Text color cannot be empty."
     }),
 });
 

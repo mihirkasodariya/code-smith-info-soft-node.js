@@ -8,6 +8,7 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import sendMail from '../../config/mailer/index.js';
+import { getAllActiveAdminEmails } from "../utils/commonFunctions.js"
 
 export const addHireOurDeveloper = async (req, res) => {
     const logo = req?.file?.filename;
@@ -42,6 +43,7 @@ export const getHireOurDeveloper = async (req, res) => {
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
+
 export const getAllHireOurDevelopers = async (req, res) => {
     try {
         const { page, limit } = req.query;
@@ -91,7 +93,7 @@ export const updateHireOurDevelopers = async (req, res) => {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     const updateData = req.body;
-    req.files?.image?.length && (updateData.image = req.files.image.map((f) => f.filename));
+    req.file?.filename && (updateData.logo = req.file.filename);
     try {
         await hireDeveloperModel.findByIdAndUpdate(
             { _id: id },
@@ -139,15 +141,17 @@ export const addHireDeveloperInquiry = async (req, res) => {
             message,
             service
         });
+        const adminEmailSend = await getAllActiveAdminEmails();
+        const allRecipients = [email, ...adminEmailSend];
         const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-        const fullName = `${capitalize(name)}`;
-        const subject = `Thanks for Reaching Out – We’ve Received Your${service} Request!`
-        sendMail("hire_developer_request", subject, email, {
-            fullName: fullName,
-            email: email,
-            hiringDuration: hiringDuration,
-            service: service,
-            message: message,
+        const fullName = capitalize(name);
+        const subject = `Thanks for Reaching Out – We’ve Received Your ${service} Request!`;
+        sendMail("hire_developer_request", subject, allRecipients, {
+            fullName,
+            email,
+            hiringDuration,
+            service,
+            message,
             base_URL: process.env.BASE_URL,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);

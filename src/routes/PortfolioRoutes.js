@@ -12,7 +12,7 @@ import {
 
 router.post("/addPortfolio", portfolio, validateAccessToken, addPortfolio);
 router.get("/getAllPortfolio", getAllPortfolio);
-router.put("/updatePortfolio/:id", validateAccessToken, updatePortfolio);
+router.put("/updatePortfolio/:id", portfolio, validateAccessToken, updatePortfolio);
 router.delete("/deletePortfolio/:id", validateAccessToken, deletePortfolio);
 router.get("/getPortfolioById/:id", getPortfolioById);
 

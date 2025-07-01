@@ -11,7 +11,7 @@ export const addPortfolio = async (req, res) => {
     const image = req.files?.image?.[0]?.filename || '';
     req.body.banner = banner;
     req.body.image = image;
-    const { techStackId, projectName, description, features } = req.body;
+    const { techStackId, projectName, description, features, isMobile } = req.body;
 
     const { error } = portfolioValidation.validate(req.body);
     if (error) {
@@ -25,6 +25,7 @@ export const addPortfolio = async (req, res) => {
             features,
             banner,
             image,
+            isMobile,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_PORTFOLIO, newPortfolio);
     } catch (error) {
@@ -101,7 +102,7 @@ export const updatePortfolio = async (req, res) => {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     req.files?.banner?.[0]?.filename && (updateData.banner = req.files.banner[0].filename);
-    req.files?.image?.length && (updateData.image = req.files.image.map((f) => f.filename));
+    req.files?.image?.[0]?.filename && (updateData.image = req.files.image[0].filename);
     try {
         await portfolioModel.findByIdAndUpdate(
             { _id: id },
@@ -124,7 +125,7 @@ export const deletePortfolio = async (req, res) => {
     try {
         await portfolioModel.findByIdAndUpdate(
             { _id: id },
-            { $set: { isActive: false } },
+            { isActive: false },
             { new: false }
         );
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.DELETE_PORTFOLIO, {});

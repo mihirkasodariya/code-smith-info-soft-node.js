@@ -12,10 +12,11 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import sendMail from '../../config/mailer/index.js';
+import { getAllActiveAdminEmails } from '../utils/commonFunctions.js';
 
 export const addBusinessInquiry = async (req, res) => {
     try {
-        const { fname, lname, email, type, mobile, message } = req.body;
+        const { fname, lname, email, type, mobile, message, budget } = req.body;
 
         const { error } = inquiryValidation.validate(req.body);
         if (error) {
@@ -28,17 +29,24 @@ export const addBusinessInquiry = async (req, res) => {
             type,
             mobile,
             message,
+            budget,
         });
-        const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
-        const fullName = `${capitalize(fname)} ${capitalize(lname)}`;
-        sendMail("business_inquiry", "Thanks for reaching out to CodeSmith InfoSoft LLP — we appreciate your interest!", email, {
-            fullName: fullName,
-            email: email,
-            mobile: mobile,
-            message: message,
-            base_URL: process.env.BASE_URL,
-        });
+        if (message) {
+            const adminEmailSend = await getAllActiveAdminEmails();
+            const allRecipients = [email, ...adminEmailSend];
+            const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            const fullName = `${capitalize(fname)} ${capitalize(lname)}`;
+            const subject = `Thanks for reaching out to CodeSmith InfoSoft LLP — we appreciate your interest!`;
+
+            sendMail("business_inquiry", subject, allRecipients, {
+                fullName: fullName,
+                email: email,
+                mobile: mobile,
+                message: message,
+                base_URL: process.env.BASE_URL,
+            });
+        };
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_INQUIRY, inquiry);
     } catch (error) {
         console.error('Error in addBusinessInquiry:', error);
@@ -154,10 +162,15 @@ export const getAllJobApplication = async (req, res) => {
         const query = { isActive: true };
         const sort = { createdAt: -1 };
 
-        const [allJobs, totalRecords] = await Promise.all([
+        const [allJobsRaw, totalRecords] = await Promise.all([
             jobModel.find(query).populate('careerId').sort(sort).skip(skip).limit(limit).lean(),
             jobModel.countDocuments(query),
         ]);
+        const allJobs = allJobsRaw.map(job => {
+            job.attach = `/jobApplication/${job.attach || ''}`;
+            return job;
+        });
+
         const totalPages = Math.ceil(totalRecords / limit);
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.JOB_LIST, {
             page,
@@ -276,7 +289,12 @@ export const addSubscribe = async (req, res) => {
         if (alreadyExist) {
             return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_SUCCESS, {});
         };
-        sendMail("subscribe", "Welcome to CodeSmith InfoSoft! 🎉 Thanks for Subscribing.", email, {
+
+        const adminEmailSend = await getAllActiveAdminEmails();
+        const allRecipients = [email, ...adminEmailSend];
+        const subject = `Welcome to CodeSmith InfoSoft! 🎉 Thanks for Subscribing.`;
+
+        sendMail("subscribe", subject, allRecipients, {
             fullName: email,
             base_URL: process.env.BASE_URL
         });

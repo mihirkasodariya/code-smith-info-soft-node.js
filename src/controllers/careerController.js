@@ -112,7 +112,7 @@ export const updateCareer = async (req, res) => {
 
 export const archiveCareer = async (req, res) => {
     const { id } = req?.params;
-    const { error } = idValidation.validate({ id: id });
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
@@ -131,7 +131,7 @@ export const archiveCareer = async (req, res) => {
 
 export const deleteCareer = async (req, res) => {
     const { id } = req?.params;
-    const { error } = idValidation.validate({ id: id });
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };

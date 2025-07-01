@@ -7,6 +7,7 @@ import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import { subscribeUserModel } from "../models/contactModel.js"
 import sendMail from '../../config/mailer/index.js';
+import { getAllActiveAdminEmails } from "../utils/commonFunctions.js"
 
 export const addBlog = async (req, res) => {
     const image = req?.file?.filename;
@@ -24,19 +25,21 @@ export const addBlog = async (req, res) => {
             description,
             createdBy,
         });
-        const subscribeList = await subscribeUserModel.find({ isActive: true })
+        const adminEmails = await getAllActiveAdminEmails();
+
+        const subscribers = await subscribeUserModel.find({ isActive: true }).select("email");
+        const subscriberEmails = subscribers.map(sub => sub.email);
+        const allRecipients = [...adminEmails, ...subscriberEmails];
 
         const shortDescription = description.split(" ").slice(0, 200).join(" ");
-        await subscribeList.reduce(async (prevPromise, subscriber) => {
-            await prevPromise;
-            await sendMail("blog", "📊 New Blog Released by CodeSmith InfoSoft LLP- See What We Built!", subscriber.email, {
-                title: title,
-                mainImage: '/blog/' + image,
-                description: shortDescription,
-                base_URL: process.env.BASE_URL,
-            });
-            await new Promise(resolve => setTimeout(resolve, 3000));
-        }, Promise.resolve());
+        const subject = "📊 New Blog Released by CodeSmith InfoSoft LLP - See What We Built!";
+
+        sendMail("blog", subject, allRecipients, {
+            title,
+            mainImage: '/blog/' + image,
+            description: shortDescription,
+            base_URL: process.env.BASE_URL,
+        });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_BLOG, addBlog);
     } catch (error) {
         console.error('Error in addBlog:', error);

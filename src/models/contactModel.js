@@ -9,7 +9,8 @@ const inquirySchema = new Schema({
     email: { type: String, required: true },
     type: { type: String, required: true },
     mobile: { type: String, required: true },
-    message: { type: String, required: true },
+    message: { type: String, required: false },
+    budget: { type: Boolean, required: false },
     isActive: { type: Boolean, default: true },
     isMark: { type: Boolean, default: false },
 },
@@ -44,12 +45,20 @@ export const inquiryValidation = Joi.object({
         "string.empty": "Mobile number is required",
         "any.required": "Mobile number is required"
     }),
-    message: Joi.string().min(5).required().messages({
+    message: Joi.string().messages({
+        "string.base": "Message must be a text",
         "string.empty": "Message is required",
-        "string.min": "Message must be at least 5 characters long",
-        "any.required": "Message is required"
     }),
-});
+    budget: Joi.boolean().messages({
+        "boolean.base": "Security Budget must be true or false",
+    }),
+}).or('message', 'budget')
+    .nand('message', 'budget') // not both allowed
+    .messages({
+        "object.missing": "Please provide either a message or a security budget",
+        "object.nand": "Only one of message or security budget is allowed",
+    });
+
 
 export const idValidation = Joi.object({
     id: Joi.string().length(24).hex().required().messages({
@@ -95,10 +104,10 @@ export const jobValidation = Joi.object({
         "any.required": "Name is required"
     }),
     email: Joi.string().email().trim().lowercase().required().messages({
-          "string.empty": "Email is required",
-          "string.email": "Please provide a valid email address",
-          "any.required": "Email is required",
-      }),
+        "string.empty": "Email is required",
+        "string.email": "Please provide a valid email address",
+        "any.required": "Email is required",
+    }),
     mobile: Joi.string().required().messages({
         "string.empty": "Phone number is required",
         "any.required": "Phone number is required"

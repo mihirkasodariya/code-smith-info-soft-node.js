@@ -7,6 +7,7 @@ import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 import { subscribeUserModel } from "../models/contactModel.js"
 import sendMail from '../../config/mailer/index.js';
+import { getAllActiveAdminEmails } from "../utils/commonFunctions.js"
 
 export const addCaseStudy = async (req, res) => {
     const companyLogo = req.files?.companyLogo?.[0]?.filename;
@@ -17,7 +18,7 @@ export const addCaseStudy = async (req, res) => {
     req.body.mainImage = mainImage;
     req.body.typography = typography;
     req.body.color = color;
-    const { projectName, description, platform, duration, industry, problem, solution, tech, devProcess, challenges, conclusion } = req.body;
+    const { projectName, description, platform, duration, industry, problem, solution, tech, devProcess, challenges, conclusion, isMobile } = req.body;
 
     const { error } = caseStudyValidation.validate(req.body);
     if (error) {
@@ -40,20 +41,23 @@ export const addCaseStudy = async (req, res) => {
             conclusion,
             companyLogo,
             mainImage,
+            isMobile
         });
-        const subscribeList = await subscribeUserModel.find({ isActive: true })
+
+        const subscribers = await subscribeUserModel.find({ isActive: true }).select("email");
+        const subscriberEmails = subscribers.map(sub => sub.email);
+        const adminEmails = await getAllActiveAdminEmails();
+        const allRecipients = [...adminEmails, ...subscriberEmails];
 
         const shortDescription = description.split(" ").slice(0, 200).join(" ");
-        await subscribeList.reduce(async (prevPromise, subscriber) => {
-            await prevPromise;
-            await sendMail("case_study", "📊 New Case Study Released by CodeSmith InfoSoft LLP - See What We Built!", subscriber.email, {
-                title: projectName,
-                mainImage: '/caseStudy/' + mainImage,
-                description: shortDescription,
-                base_URL: process.env.BASE_URL
-            });
-            await new Promise(resolve => setTimeout(resolve, 3000));
-        }, Promise.resolve());
+        const subject = "📊 New Case Study Released by CodeSmith InfoSoft LLP - See What We Built!";
+
+        sendMail("case_study", subject, allRecipients, {
+            title: projectName,
+            mainImage: '/caseStudy/' + mainImage,
+            description: shortDescription,
+            base_URL: process.env.BASE_URL,
+        });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_CASE_STUDY, newCaseStudy);
     } catch (error) {
         console.error('Error in addCaseStudy:', error);
@@ -166,7 +170,7 @@ export const deleteCaseStudy = async (req, res) => {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
     try {
-       await caseStudyModel.findByIdAndUpdate(
+        await caseStudyModel.findByIdAndUpdate(
             { _id: id },
             { isActive: false },
             { new: false }

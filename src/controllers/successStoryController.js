@@ -7,7 +7,6 @@ import {
 import response from "../utils/response.js";
 import { resStatusCode, resMessage } from "../utils/constants.js";
 
-
 export const addSuccessStoryImage = async (req, res) => {
     const image = req?.file?.filename
     const type = req?.query?.type;

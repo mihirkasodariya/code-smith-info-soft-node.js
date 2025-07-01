@@ -57,7 +57,7 @@ export const getAllTechStack = async (req, res) => {
 };
 
 export const updateTechStack = async (req, res) => {
-    const { id } = req?.params;
+    const { id } = req.params;
     req.body.id = id;
     const { error } = updateTechStackValidation.validate(req.body);
     if (error) {
@@ -78,8 +78,8 @@ export const updateTechStack = async (req, res) => {
 };
 
 export const deleteTechStack = async (req, res) => {
-    const { id } = req?.params;
-    const { error } = idValidation.validate({ id: id });
+    const { id } = req.params;
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };

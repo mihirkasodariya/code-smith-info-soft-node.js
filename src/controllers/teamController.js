@@ -10,7 +10,6 @@ export const addTeamMember = async (req, res) => {
     try {
         let photo = req?.file?.filename;
         req.body.photo = photo;
-        // const { name, position, linkedin, instagram, facebook, twitter, textColor, bgColor } = req.body;
         const { error } = teamValidation.validate(req.body);
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});

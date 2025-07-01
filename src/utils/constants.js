@@ -46,6 +46,7 @@ export const resMessage = {
     DELETE_PORTFOLIO: "Portfolio deleted successfully! It has been removed from your list.",
     ADD_TESTIMONIALS: "testimonials has been published successfully!",
     TESTIMONIALS_LIST: "testimonials list fetched successfully!",
+    TESTIMONIALS_SINGLE: "testimonials fetched successfully!",
     UPDATE_TESTIMONIALS: "testimonials has been updated successfully!",
     DELETE_TESTIMONIALS: "testimonials deleted successfully! It has been removed from your list.",
     ADD_MEDIA_FILE: "mediaFile has been published successfully!",

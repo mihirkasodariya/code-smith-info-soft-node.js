@@ -32,7 +32,7 @@ export const getAllGallery = async (req, res) => {
         const gallery = await galleryModel.find({ isActive: true }).sort({ createdAt: -1 });
         const galleryWithPath = gallery.map((item) => ({
             ...item._doc,
-            image: `/gallery/${item.image}`
+            image: `/gallery/${item.image}`,
         }));
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.GALLERY_LIST, galleryWithPath);
     } catch (error) {
@@ -43,7 +43,7 @@ export const getAllGallery = async (req, res) => {
 
 export const deleteGallery = async (req, res) => {
     const { id } = req?.params;
-    const { error } = idValidation.validate({ id: id });
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };

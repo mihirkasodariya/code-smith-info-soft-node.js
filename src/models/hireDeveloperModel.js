@@ -25,9 +25,10 @@ export const hireDeveloperValidation = Joi.object({
         "string.empty": "Title is required.",
         "any.required": "Title is required.",
     }),
-    url: Joi.string().uri().messages({
+    url: Joi.string().required().messages({
         "string.base": "URL must be a valid string.",
-        "string.uri": "URL must be a valid link.",
+        "string.empty": "URL is required.",
+        "any.required": "URL is required.",
     }),
 });
 
@@ -48,7 +49,7 @@ const HireDeveloperInquirySchema = new Schema(
         email: { type: String, required: true },
         hiringDuration: { type: String, required: true },
         message: { type: String, required: true },
-        service: { type: String, required: true },
+        service: { type: [String], required: true },
         isMark: { type: Boolean, default: false },
         isActive: { type: Boolean, default: true },
     },
@@ -76,9 +77,11 @@ export const HireDeveloperInquiryValidation = Joi.object({
     message: Joi.string().required().messages({
         'string.base': 'Message must be a valid string.',
     }),
-    service: Joi.string().required().messages({
-        'string.base': 'Service must be a valid string.',
-        'string.empty': 'Service is required.',
+    service: Joi.array().items(Joi.string().required()).min(1).required().messages({
+        'array.base': 'Service must be an array.',
+        'array.includesRequiredUnknowns': 'Each service must be a valid string.',
+        'array.min': 'At least one service is required.',
         'any.required': 'Service is required.',
-    }),
+    })
+
 });

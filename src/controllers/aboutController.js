@@ -15,22 +15,30 @@ export const addAboutUS = async (req, res) => {
             mediaFile: files.map(file => ({ filename: file.filename })),
             type,
         });
+
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
-        };
+        }
+        if (type === 'video') {
+            await aboutUSModel.updateMany({ type: 'video' }, { $set: { isActive: false } });
+        }
         const createPromises = files.map((file) => {
             return aboutUSModel.create({
                 mediaFile: file.filename,
                 type,
+                isActive: type === 'video' ? true : true
             });
         });
+
         const savedMedias = await Promise.all(createPromises);
+
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_MEDIA_FILE, savedMedias);
     } catch (error) {
         console.error('Error in addAboutUS:', error);
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
-    };
+    }
 };
+
 
 export const getAllAboutUS = async (req, res) => {
     const { type } = req.params;
