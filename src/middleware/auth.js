@@ -21,9 +21,8 @@ export async function generateJWToken(payload) {
 };
 
 export async function validateAccessToken(req, res, next) {
+    const token = req.headers.authorization || req.headers.Authorization;
     try {
-        const token = req.headers.authorization || req.headers.Authorization;
-
         if (!token) {
             return response.error(res, resStatusCode.CLIENT_ERROR, resMessage.NO_TOKEN_PROVIDED, {});
         };
@@ -31,7 +30,6 @@ export async function validateAccessToken(req, res, next) {
             issuer: "tracking",
             expiresIn: process.env.JWT_EXPIRES_IN,
         });
-
         const authenticatedUser = await authModel.findById({ _id: decodedToken._id });
         if (!authenticatedUser) {
             return response.error(res, resStatusCode.UNAUTHORISED, resMessage.UNAUTHORISED, {});
