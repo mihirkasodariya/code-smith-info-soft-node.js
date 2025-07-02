@@ -57,6 +57,7 @@ export const getAllPortfolio = async (req, res) => {
         } else {
             portfolioData = await portfolioModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).lean();
         };
+        
         const techStackMap = new Map();
         const portfolio = portfolioData.map(data => {
             const { techStackId, image, banner, ...rest } = data;

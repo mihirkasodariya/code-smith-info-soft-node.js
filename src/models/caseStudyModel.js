@@ -25,13 +25,6 @@ const caseStudySchema = new Schema(
         challenges: { type: [String], required: true },
         color: { type: String, required: true },
         typography: { type: String, required: true },
-        // typography: [
-        //     {
-        //         _id: false,
-        //         name: { type: String },
-        //         cdn: { type: String },
-        //     },
-        // ],
         conclusion: { type: [String], required: true },
         isMobile: { type: Boolean, default: false },
         isActive: { type: Boolean, default: true },
@@ -107,26 +100,6 @@ export const caseStudyValidation = Joi.object({
         'any.required': 'Typography image is required.',
     }),
     isMobile: Joi.boolean().optional(),
-    // color: Joi.array().items(Joi.string().messages({
-    //     'string.pattern.base': 'Color must be a valid hex code.',
-    // })).min(3).required().messages({
-    //     'array.base': 'Color must be an array.',
-    //     'array.min': 'At least one color is required.',
-    //     'any.required': 'Color is required.',
-    // }),
-    // typography: Joi.array().items(Joi.object({
-    //     name: Joi.string().required().messages({
-    //         'string.empty': 'Typography name is required.',
-    //         'any.required': 'Typography name is required.',
-    //     }),
-    //     cdn: Joi.string().uri().required().messages({
-    //         'string.empty': 'Typography CDN is required.',
-    //         'string.uri': 'CDN must be a valid URL.',
-    //         'any.required': 'Typography CDN is required.',
-    //     }),
-    // })).messages({
-    //     'array.base': 'Typography must be an array of objects.',
-    // }),
     conclusion: Joi.array().items(Joi.string()).min(1).required().messages({
         'array.base': 'Conclusion must be an array.',
         'array.min': 'At least one conclusion point is required.',

@@ -8,7 +8,6 @@ import {
     deleteHomeBanner,
 } from "../controllers/homeController.js";
 
-// hero banner
 router.post("/addHomeBanner", homeBanner, validateAccessToken, addHomeBanner);
 router.get("/getAllHomeBanner", getAllHomeBanner);
 router.delete("/deleteHomeBanner/:id", validateAccessToken, deleteHomeBanner);

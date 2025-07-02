@@ -8,7 +8,6 @@ import {
     getAllSuccessStoryImage,
 } from "../controllers/successStoryController.js";
 
-//Our Success Stories
 router.post("/addSuccessStoryImage", successStoryImage, validateAccessToken, addSuccessStoryImage);
 router.get("/getAllSuccessStoryImage", getAllSuccessStoryImage);
 router.delete("/deleteSuccessStoryImage/:id", validateAccessToken, deleteSuccessStoryImage);

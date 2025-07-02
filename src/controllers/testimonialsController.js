@@ -9,7 +9,7 @@ import { resStatusCode, resMessage } from "../utils/constants.js";
 export const addTestimonials = async (req, res) => {
     const image = req.file?.filename || '';
     req.body.image = image;
-    const { name, description, rating, bgColor, textColor } = req.body;
+    const { name, description, rating} = req.body;
     const { error } = testimonialsValidate.validate(req.body);
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
@@ -20,8 +20,6 @@ export const addTestimonials = async (req, res) => {
             description,
             rating,
             image,
-            bgColor,
-            textColor,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TESTIMONIALS, newtestimonials);
     } catch (error) {
@@ -55,7 +53,7 @@ export const getAllTestimonials = async (req, res) => {
         };
         const formatted = testimonials.map(data => ({
             ...data,
-            image: `/trestimonials/${data.image}`,
+            image: `/testimonials/${data.image}`,
         }));
         const responseData = isPaginated
             ? {
@@ -72,6 +70,25 @@ export const getAllTestimonials = async (req, res) => {
     };
 };
 
+export const getTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = idValidation.validate({ id });
+        if (error) {
+            return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message);
+        };
+        const getTestimonials = await testimonialsModel.findOne({ _id: id, isActive: true });
+        const responseData = {
+            ...getTestimonials._doc,
+            image: `/testimonials/${getTestimonials?.image}`,
+        };
+        return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.TESTIMONIALS_SINGLE, responseData);
+    } catch (error) {
+        console.error('Error in getInquiry:', error);
+        return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
+    };
+};
+
 export const updateTestimonials = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
@@ -79,7 +96,7 @@ export const updateTestimonials = async (req, res) => {
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
-    req.files?.image?.length && (updateData.image = req.files.image.map((f) => f.filename));
+    req.file?.filename && (updateData.image = req.file.filename);
     try {
         await testimonialsModel.findByIdAndUpdate(
             { _id: id },
@@ -95,7 +112,7 @@ export const updateTestimonials = async (req, res) => {
 
 export const deleteTestimonials = async (req, res) => {
     const { id } = req.params;
-    const { error } = idValidation.validate(id);
+    const { error } = idValidation.validate({ id });
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };

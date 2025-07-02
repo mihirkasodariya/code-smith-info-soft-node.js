@@ -89,7 +89,6 @@ export const caseStudy = multer({
     { name: 'mainImage', maxCount: 1 },
     { name: 'color', maxCount: 1 },
     { name: 'typography', maxCount: 1 },
-    // { name: 'images', maxCount: 10 },
 ]);
 
 

@@ -289,7 +289,6 @@ export const addSubscribe = async (req, res) => {
         if (alreadyExist) {
             return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.SUBSCRIBE_SUCCESS, {});
         };
-
         const adminEmailSend = await getAllActiveAdminEmails();
         const allRecipients = [email, ...adminEmailSend];
         const subject = `Welcome to CodeSmith InfoSoft! 🎉 Thanks for Subscribing.`;

@@ -202,6 +202,7 @@ export const getHireDeveloperInquiry = async (req, res) => {
         return response.error(res, resStatusCode.INTERNAL_SERVER_ERROR, resMessage.INTERNAL_SERVER_ERROR, {});
     };
 };
+
 export const markHireDeveloperInquiry = async (req, res) => {
     try {
         const { id } = req.params;

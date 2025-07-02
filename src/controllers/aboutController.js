@@ -15,7 +15,6 @@ export const addAboutUS = async (req, res) => {
             mediaFile: files.map(file => ({ filename: file.filename })),
             type,
         });
-
         if (error) {
             return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
         }
@@ -29,9 +28,7 @@ export const addAboutUS = async (req, res) => {
                 isActive: type === 'video' ? true : true
             });
         });
-
         const savedMedias = await Promise.all(createPromises);
-
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_MEDIA_FILE, savedMedias);
     } catch (error) {
         console.error('Error in addAboutUS:', error);

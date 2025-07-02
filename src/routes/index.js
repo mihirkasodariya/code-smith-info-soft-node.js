@@ -15,8 +15,8 @@ import about from "./aboutRoutes.js";
 import gallery from "./galleryRoutes.js";
 import team from "./teamRoutes.js";
 import hireDeveloper from "./hireOurDeveloperRoutes.js";
-
 const router = Router();
+
 router.use("/auth", auth);
 router.use("/home", home);
 router.use("/enterprise", enterprise);

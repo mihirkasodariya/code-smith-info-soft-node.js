@@ -8,7 +8,6 @@ import {
     deleteEnterpriseLogo,
 } from "../controllers/enterpriseController.js";
 
-// Trusted by Startups and Enterprises Worldwide
 router.post("/addEnterpriseLogo", homeEnterpriseLogo, validateAccessToken, addEnterpriseLogo);
 router.get("/getAllEnterpriseLogo", getAllEnterpriseLogo);
 router.delete("/deleteEnterpriseLogo/:id", validateAccessToken, deleteEnterpriseLogo);

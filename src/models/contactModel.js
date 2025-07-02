@@ -16,7 +16,6 @@ const inquirySchema = new Schema({
 },
     { timestamps: true }
 );
-
 export const inquiryModel = model(dbTableName.INQUIRY, inquirySchema);
 
 export const inquiryValidation = Joi.object({
@@ -85,7 +84,6 @@ const jobSchema = new mongoose.Schema({
 },
     { timestamps: true },
 );
-
 export const jobModel = model(dbTableName.JOB_APPLICATION, jobSchema);
 
 export const jobValidation = Joi.object({

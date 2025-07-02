@@ -42,7 +42,6 @@ export const idValidation = Joi.object({
     }),
 });
 
-
 const HireDeveloperInquirySchema = new Schema(
     {
         name: { type: String, required: true },
@@ -82,6 +81,5 @@ export const HireDeveloperInquiryValidation = Joi.object({
         'array.includesRequiredUnknowns': 'Each service must be a valid string.',
         'array.min': 'At least one service is required.',
         'any.required': 'Service is required.',
-    })
-
+    }),
 });

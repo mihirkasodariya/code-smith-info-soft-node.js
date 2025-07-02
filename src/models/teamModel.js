@@ -17,7 +17,6 @@ const teamSchema = new Schema({
 },
     { timestamps: true },
 );
-
 export const teamModel = model(dbTableName.TEAM, teamSchema);
 
 export const teamValidation = Joi.object({
