@@ -11,7 +11,7 @@ import {
 } from "../controllers/teamController.js";
 
 router.post("/addTeamMember", validateAccessToken, teamMember, addTeamMember);
-router.put("/updateTeamMember/:id", validateAccessToken, teamMember, updateTeamMember);
+router.put("/updateTeamMember/:id", teamMember, validateAccessToken, updateTeamMember);
 router.get('/getAllTeamMember', getAllTeamMember);
 router.get('/getTeamMemberById/:id', validateAccessToken, getTeamMemberById);
 router.delete('/deleteTeamMember/:id', validateAccessToken, deleteTeamMember);

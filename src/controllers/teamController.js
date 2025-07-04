@@ -32,7 +32,8 @@ export const updateTeamMember = async (req, res) => {
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
     };
-    req.file?.photo?.filename && (updateData.photo = req.file?.photo?.filename);
+    console.log('req.file',req.file)
+    req.file?.filename && (updateData.photo = req.file?.filename);
     try {
         await teamModel.findByIdAndUpdate(
             id,
