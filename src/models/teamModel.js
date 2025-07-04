@@ -11,8 +11,6 @@ const teamSchema = new Schema({
     twitter: { type: String },
     facebook: { type: String },
     photo: { type: String, require: true },
-    textColor: { type: String },
-    bgColor: { type: String },
     isActive: { type: Boolean, default: true },
 },
     { timestamps: true },
@@ -47,12 +45,6 @@ export const teamValidation = Joi.object({
     }),
     photo: Joi.string().required().messages({
         "string.uri": "Photo must be a valid URL"
-    }),
-    textColor: Joi.string().optional().messages({
-        "string.pattern.base": "Text color must be a valid hex code (e.g. ffffff)"
-    }),
-    bgColor: Joi.string().optional().messages({
-        "string.pattern.base": "Background color must be a valid hex code (e.g. 000000)"
     }),
 });
 

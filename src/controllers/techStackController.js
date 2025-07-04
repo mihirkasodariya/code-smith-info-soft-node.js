@@ -9,7 +9,7 @@ import { resStatusCode, resMessage } from "../utils/constants.js";
 import { blogModel } from "../models/blogModel.js";
 
 export const addTechStack = async (req, res) => {
-    const { name, bgColor, textColor } = req.body;
+    const { name, } = req.body;
     const { error } = techStackValidation.validate(req.body);
     if (error) {
         return response.error(res, resStatusCode.CLIENT_ERROR, error.details[0].message, {});
@@ -21,8 +21,6 @@ export const addTechStack = async (req, res) => {
         };
         const addTechStack = await techStackModel.create({
             name,
-            bgColor,
-            textColor,
         });
         return response.success(res, resStatusCode.ACTION_COMPLETE, resMessage.ADD_TECH_STACK, addTechStack);
     } catch (error) {

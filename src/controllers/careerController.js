@@ -48,12 +48,12 @@ export const getAllCareer = async (req, res) => {
             const limitNum = parseInt(limit);
             const skip = (pageNum - 1) * limitNum;
             [careerData, totalRecords] = await Promise.all([
-                careerModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).skip(skip).limit(limitNum).lean(),
+                careerModel.find(query).populate('techStackId', '_id name').sort(sort).skip(skip).limit(limitNum).lean(),
                 careerModel.countDocuments(query),
             ]);
             totalPages = Math.ceil(totalRecords / limitNum);
         } else {
-            careerData = await careerModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).lean();
+            careerData = await careerModel.find(query).populate('techStackId', '_id name').sort(sort).lean();
         };
         const techStackMap = new Map();
         const career = careerData.map(data => {
@@ -62,16 +62,12 @@ export const getAllCareer = async (req, res) => {
                 techStackMap.set(String(techStackId._id), {
                     techStackId: techStackId._id,
                     techStackName: techStackId.name,
-                    bgColor: techStackId.bgColor,
-                    textColor: techStackId.textColor,
                 });
             };
             return {
                 ...rest,
                 techStackId: techStackId?._id,
                 techStackName: techStackId?.name,
-                bgColor: techStackId?.bgColor,
-                textColor: techStackId?.textColor,
             };
         });
         const techStacks = Array.from(techStackMap.values());

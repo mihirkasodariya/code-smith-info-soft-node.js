@@ -78,8 +78,6 @@ export const getAllBlog = async (req, res) => {
                 techStackMap.set(String(techStackId._id), {
                     techStackId: techStackId._id,
                     techStackName: techStackId.name,
-                    bgColor: techStackId.bgColor,
-                    textColor: techStackId.textColor,
                 });
             };
             return {
@@ -87,8 +85,6 @@ export const getAllBlog = async (req, res) => {
                 image: `/blog/${image}`,
                 techStackId: techStackId?._id,
                 techStackName: techStackId?.name,
-                bgColor: techStackId?.bgColor,
-                textColor: techStackId?.textColor,
             };
         });
         const techStacks = Array.from(techStackMap.values());

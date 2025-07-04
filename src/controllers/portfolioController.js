@@ -50,12 +50,12 @@ export const getAllPortfolio = async (req, res) => {
             const limitNum = parseInt(limit);
             const skip = (pageNum - 1) * limitNum;
             [portfolioData, totalRecords] = await Promise.all([
-                portfolioModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).skip(skip).limit(limitNum).lean(),
+                portfolioModel.find(query).populate('techStackId', '_id name').sort(sort).skip(skip).limit(limitNum).lean(),
                 portfolioModel.countDocuments(query),
             ]);
             totalPages = Math.ceil(totalRecords / limitNum);
         } else {
-            portfolioData = await portfolioModel.find(query).populate('techStackId', '_id name bgColor textColor').sort(sort).lean();
+            portfolioData = await portfolioModel.find(query).populate('techStackId', '_id name').sort(sort).lean();
         };
         
         const techStackMap = new Map();
@@ -65,8 +65,6 @@ export const getAllPortfolio = async (req, res) => {
                 techStackMap.set(String(techStackId._id), {
                     techStackId: techStackId._id,
                     techStackName: techStackId.name,
-                    bgColor: techStackId.bgColor,
-                    textColor: techStackId.textColor,
                 });
             };
             return {
@@ -75,8 +73,6 @@ export const getAllPortfolio = async (req, res) => {
                 banner: `/portfolio/${banner}`,
                 techStackId: techStackId?._id,
                 techStackName: techStackId?.name,
-                bgColor: techStackId?.bgColor,
-                textColor: techStackId?.textColor,
             };
         });
         const techStacks = Array.from(techStackMap.values());
