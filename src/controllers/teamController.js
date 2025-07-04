@@ -51,7 +51,7 @@ export const getAllTeamMember = async (req, res) => {
         const { page, limit } = req.query;
         const isPaginated = page && limit;
         const query = { isActive: true };
-        const sort = { createdAt: -1 };
+        const sort = { createdAt: 1 };
 
         let teams = [];
         let totalRecords = 0;
