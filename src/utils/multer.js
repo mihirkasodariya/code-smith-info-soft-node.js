@@ -194,7 +194,7 @@ const teamMemberStorage = diskStorage({
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
         const name = file.originalname.split('.')[0].slice(0, 4);
-        cb(null, Date.now() + '-team-member' + name + ext);
+        cb(null, Date.now() + 'team-member' + name + ext);
     },
 });
 export const teamMember = multer({
